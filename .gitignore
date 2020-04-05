@@ -1,0 +1,13 @@
+.vs/
+
+Release/
+Debug/
+
+CSHackCreator-2/Release/
+CSHackCreator-2/Debug/
+
+DllStub/Release/
+DllStub/Debug/
+
+ExeStub/Release/
+ExeStub/Debug/

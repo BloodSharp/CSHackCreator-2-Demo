@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Archivos de origen">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Archivos de recursos">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Archivos de origen\ImGui">
+      <UniqueIdentifier>{eff7da50-1007-43a6-9eb8-a0fd5bec9ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\ImGui">
+      <UniqueIdentifier>{97abde89-ca02-46e2-99d7-de434c51ee0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\JSON">
+      <UniqueIdentifier>{3e6676c7-d128-459e-8a75-eee1a1763919}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\JSON">
+      <UniqueIdentifier>{1d668be8-d6c8-41cd-b8f3-6847b804d3b2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CSHackCreator-2.rc">
+      <Filter>Archivos de recursos</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+    <Image Include="CSHackCreator-2.ico">
+      <Filter>Archivos de recursos</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx9.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImNodes.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImNodesEz.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="interface_designer.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="CSHackCreator.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\json.h">
+      <Filter>Archivos de encabezado\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\json-forwards.h">
+      <Filter>Archivos de encabezado\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImNodes.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImNodesEz.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="interface_designer.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON\jsoncpp.cpp">
+      <Filter>Archivos de origen\JSON</Filter>
+    </ClCompile>
+    <ClCompile Include="Serialization.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
