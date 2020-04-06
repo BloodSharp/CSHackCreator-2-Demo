@@ -26,3 +26,8 @@ namespace CSHackCreator
 		void Settings();
 	}
 }
+
+void GetVal(Json::Value& config, int* setting);
+void GetVal(Json::Value& config, bool* setting);
+void GetVal(Json::Value& config, float* setting);
+void GetVal(Json::Value& config, char* setting, int bufferSize);
