@@ -55,6 +55,7 @@ void CSHackCreator::Project::Open(HWND hwnd)
 
         CleanAllNodesAndConnections();
         CSHackCreator::Settings::Open(settings);
+        CSHackCreator::Settings::OpenNodes(settings);
     }
 }
 
@@ -83,6 +84,7 @@ void CSHackCreator::Project::Save(HWND hwnd)
         Json::StyledWriter styledWriter;
 
         CSHackCreator::Settings::Save(settings);
+        CSHackCreator::Settings::SaveNodes(settings);
 
         std::ofstream configDoc = std::ofstream(ofn.lpstrFile);
         configDoc << styledWriter.write(settings);
