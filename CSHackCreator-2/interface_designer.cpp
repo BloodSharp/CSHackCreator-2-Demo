@@ -422,3 +422,57 @@ void CSHackCreator::Interface::Designer()
 
     ImNodes::EndCanvas();
 }
+
+void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
+{
+    settings["Nodes"]["Count"] = CSHackCreator::Settings::Nodes.size();
+
+    for (unsigned int i = 0; i < CSHackCreator::Settings::Nodes.size(); i++)
+    {
+        settings["Nodes"][std::to_string(i).c_str()]["Type"] = CSHackCreator::Settings::Nodes[i]->uiNodeType;
+        settings["Nodes"][std::to_string(i).c_str()]["Position"]["X"] = CSHackCreator::Settings::Nodes[i]->pos.x;
+        settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"] = CSHackCreator::Settings::Nodes[i]->pos.y;
+        #ifdef _DEBUG
+            settings["Nodes"][std::to_string(i).c_str()]["Title"] = CSHackCreator::Settings::Nodes[i]->title;
+        #endif
+        ProcessSpecialSaveVariables(settings, i);
+
+        if (CSHackCreator::Settings::Nodes[i]->connections.size())
+        {
+            unsigned int iInputNode = 0;
+            for (unsigned int j = 0; j < CSHackCreator::Settings::Nodes[i]->connections.size(); j++)
+            {
+                if (CSHackCreator::Settings::Nodes[i]->connections[j].output_node != CSHackCreator::Settings::Nodes[i])
+                {
+                    // Filtramos solo los outputs
+                    iInputNode++;
+                    continue;
+                }
+
+                #ifdef _DEBUG
+                    settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j).c_str()]["SourceSlotName"] = CSHackCreator::Settings::Nodes[i]->connections[j].output_slot;
+                    settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j).c_str()]["TargetSlotName"] = CSHackCreator::Settings::Nodes[i]->connections[j].input_slot;
+                #endif
+
+                settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j).c_str()]["SourceNode"] = i;
+                for (unsigned int k = 0; k < CSHackCreator::Settings::Nodes.size(); k++)
+                {
+                    if (CSHackCreator::Settings::Nodes[i]->connections[j].input_node == CSHackCreator::Settings::Nodes[k])
+                    {
+                        settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j).c_str()]["TargetNode"] = k;
+                        for (unsigned int l = 0; l < CSHackCreator::Settings::Nodes[k]->input_slots.size(); l++)
+                            if (!strcmp(CSHackCreator::Settings::Nodes[k]->input_slots[l].title, CSHackCreator::Settings::Nodes[i]->connections[j].input_slot))
+                                settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j).c_str()]["TargetSlot"] = l;
+                    }
+                    else if (CSHackCreator::Settings::Nodes[i]->connections[j].output_node == CSHackCreator::Settings::Nodes[k])
+                    {
+                        for (unsigned int l = 0; l < CSHackCreator::Settings::Nodes[k]->output_slots.size(); l++)
+                            if (!strcmp(CSHackCreator::Settings::Nodes[k]->output_slots[l].title, CSHackCreator::Settings::Nodes[i]->connections[j].output_slot))
+                                settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j).c_str()]["SourceSlot"] = l;
+                    }
+                }
+            }
+            settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Count"] = CSHackCreator::Settings::Nodes[i]->connections.size() - iInputNode;
+        }
+    }
+}
