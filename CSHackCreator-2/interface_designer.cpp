@@ -522,12 +522,35 @@ void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
                 connection.output_node = CSHackCreator::Settings::Nodes[i];
                 GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["SourceSlot"], &iSourceSlot);
                 if (iSourceSlot == -1)
-                    return;
+                {
+                    #ifdef _DEBUG
+                        std::ostringstream strCorrupted;
+                        strCorrupted << "Corrupted file (Corrupted node " << i << " - " << j << " - No SourceSlot)";
+                        MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+                    #endif // _DEBUG
+                    continue;
+                }
                 connection.output_slot = CSHackCreator::Settings::Nodes[i]->output_slots[iSourceSlot].title;
                 GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["TargetNode"], &iTargetNode);
                 GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["TargetSlot"], &iTargetSlot);
-                if (iTargetNode == -1 || iTargetSlot == -1)
-                    return;
+                if (iTargetNode == -1)
+                {
+                    #ifdef _DEBUG
+                        std::ostringstream strCorrupted;
+                        strCorrupted << "Corrupted file (Corrupted node " << i << " - " << j << " - No TargetNode)";
+                        MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+                    #endif // _DEBUG
+                    continue;
+                }
+                if (iTargetSlot == -1)
+                {
+                    #ifdef _DEBUG
+                        std::ostringstream strCorrupted;
+                        strCorrupted << "Corrupted file (Corrupted node " << i << " - " << j << " - No TargetSlot)";
+                        MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+                    #endif // _DEBUG
+                    continue;
+                }
                 connection.input_node = CSHackCreator::Settings::Nodes[iTargetNode];
                 connection.input_slot = CSHackCreator::Settings::Nodes[iTargetNode]->input_slots[iTargetSlot].title;
 
