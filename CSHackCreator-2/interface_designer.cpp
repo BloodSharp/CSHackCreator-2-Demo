@@ -423,6 +423,112 @@ void CSHackCreator::Interface::Designer()
     ImNodes::EndCanvas();
 }
 
+void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
+{
+    int iNodesCount = 0;
+    GetVal(settings["Nodes"]["Count"], &iNodesCount);
+    bool bFailedFileProcess = false;
+
+    for (int i = 0; i < iNodesCount; i++)
+    {
+        MyNode *node = 0;
+        int iNodeType = -1;
+        const char* szNodeTitle = 0;
+
+        // Buscar el nodo por t�tulo y asignar constructor mapeado...
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Type"], &iNodeType);
+        if (iNodeType == -1)
+        {
+            std::ostringstream strCorrupted;
+            strCorrupted << "Corrupted file (Corrupted node " << i << ")";
+            MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+            bFailedFileProcess = true;
+            continue;
+        }
+        szNodeTitle = GetNodeTitle(iNodeType);
+        if (!szNodeTitle)
+            continue;
+        for (const auto& desc : available_nodes)
+            if (!strcmp(szNodeTitle, desc.first.c_str()))
+                node = desc.second();
+        if (!node)
+            continue;
+
+        node->uiNodeType = (unsigned int)iNodeType;
+        node->szText[0] = 0;
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["X"], &node->pos.x);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"], &node->pos.y);
+        //
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Text"], node->szText, MAX_PATH - 1);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["dbVariable"], &node->dbVariable);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_1"], &node->iVariable_1);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["X"], &node->vSize.x);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["Y"], &node->vSize.y);
+        //
+
+        // Procesar el nodo al vector
+        CSHackCreator::Settings::Nodes.push_back(node);
+    }
+
+    if (!bFailedFileProcess)
+    {
+        for (unsigned int i = 0; i < CSHackCreator::Settings::Nodes.size(); i++)
+        {
+            int iConnectionsOutputs = 0;
+            int iConnectionsInputs = 0;
+
+            GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["OutputsCount"], &iConnectionsOutputs);
+            GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["InputsCount"], &iConnectionsInputs);
+
+            // Procesamos conexiones del output del vector
+            for (int j = 0; j < iConnectionsOutputs; j++)
+            {
+                int iTargetNode = -1;
+                int iTargetSlot = -1;
+                int iSourceSlot = -1;
+                Connection connection;
+                connection.output_node = CSHackCreator::Settings::Nodes[i];
+                GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["SourceSlot"], &iSourceSlot);
+                if (iSourceSlot == -1)
+                    return;
+                connection.output_slot = CSHackCreator::Settings::Nodes[i]->output_slots[iSourceSlot].title;
+                GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["TargetNode"], &iTargetNode);
+                GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["TargetSlot"], &iTargetSlot);
+                if (iTargetNode == -1 || iTargetSlot == -1)
+                    return;
+                connection.input_node = CSHackCreator::Settings::Nodes[iTargetNode];
+                connection.input_slot = CSHackCreator::Settings::Nodes[iTargetNode]->input_slots[iTargetSlot].title;
+
+                //CSHackCreator::Settings::Nodes[i]->connections.push_back(connection);
+                ((MyNode*)connection.input_node)->connections.push_back(connection);
+                ((MyNode*)connection.output_node)->connections.push_back(connection);
+            }
+
+            /*
+            // Procesamos conexiones del input del vector
+            for (int j = 0; j < iConnectionsInputs; j++)
+            {
+                int iTargetNode = -1;
+                int iTargetSlot = -1;
+                int iSourceSlot = -1;
+                Connection connection;
+                connection.output_node = CSHackCreator::Settings::Nodes[i];
+                GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j)]["SourceSlot"], &iSourceSlot);
+                if (iSourceSlot == -1)
+                    return;
+                connection.output_slot = CSHackCreator::Settings::Nodes[i]->output_slots[iSourceSlot].title;
+                GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j)]["TargetNode"], &iTargetNode);
+                GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j)]["TargetSlot"], &iTargetSlot);
+                if (iTargetNode == -1 || iTargetSlot == -1)
+                    return;
+                connection.input_node = CSHackCreator::Settings::Nodes[iTargetNode];
+                connection.input_slot = CSHackCreator::Settings::Nodes[iTargetNode]->input_slots[iTargetSlot].title;
+                CSHackCreator::Settings::Nodes[i]->connections.push_back(connection);
+            }
+            */
+        }
+    }
+}
 void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
 {
     settings["Nodes"]["Count"] = CSHackCreator::Settings::Nodes.size();
