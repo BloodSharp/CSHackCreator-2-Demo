@@ -562,6 +562,16 @@ void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
         }
     }
 }
+
+void ProcessSpecialSaveVariables(Json::Value& settings, int offset)
+{
+    settings["Nodes"][std::to_string(offset).c_str()]["Text"] = CSHackCreator::Settings::Nodes[offset]->szText;
+    settings["Nodes"][std::to_string(offset).c_str()]["dbVariable"] = CSHackCreator::Settings::Nodes[offset]->dbVariable;
+    settings["Nodes"][std::to_string(offset).c_str()]["iVariable_1"] = CSHackCreator::Settings::Nodes[offset]->iVariable_1;
+    settings["Nodes"][std::to_string(offset).c_str()]["Size"]["X"] = CSHackCreator::Settings::Nodes[offset]->vSize.x;
+    settings["Nodes"][std::to_string(offset).c_str()]["Size"]["Y"] = CSHackCreator::Settings::Nodes[offset]->vSize.y;
+}
+
 void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
 {
     settings["Nodes"]["Count"] = CSHackCreator::Settings::Nodes.size();
