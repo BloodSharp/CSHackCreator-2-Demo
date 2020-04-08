@@ -455,6 +455,40 @@ const char* GetNodeTitle(int uiNodeType)
     }
 }
 
+/*
+void ProcessSpecialOpenVariables(Json::Value& settings, MyNode* node)
+{
+    switch (node->uiNodeType)
+    {
+        case NodeTypeButton:
+            break;
+        case NodeTypeCheckBox:
+            break;
+        case NodeTypeComboBox:
+            break;
+        case NodeTypeGroup:
+            break;
+        case NodeTypeNewLine:
+            break;
+        case NodeTypeTabBar:
+            break;
+        case NodeTypeTabItem:
+            break;
+        case NodeTypeText:
+            break;
+        case NodeTypeToolTip:
+            break;
+        case NodeTypeVariableEquals:
+            break;
+        case NodeTypeVariableSetValue:
+            break;
+        case NodeTypeWindow:
+            break;
+    }
+}
+*/
+
+
 void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
 {
     int iNodesCount = 0;
