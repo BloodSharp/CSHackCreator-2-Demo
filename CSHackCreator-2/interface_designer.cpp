@@ -474,6 +474,7 @@ void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
             }
             settings["Nodes"][std::to_string(i).c_str()]["Connections"]["OutputsCount"] = CSHackCreator::Settings::Nodes[i]->connections.size() - iInputNode;
 
+            /*
             unsigned int iOutputNode = 0;
             for (unsigned int j = 0; j < CSHackCreator::Settings::Nodes[i]->connections.size(); j++)
             {
@@ -509,6 +510,7 @@ void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
             }
 
             settings["Nodes"][std::to_string(i).c_str()]["Connections"]["InputsCount"] = CSHackCreator::Settings::Nodes[i]->connections.size() - iOutputNode;
+            */
         }
     }
 }
