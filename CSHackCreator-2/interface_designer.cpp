@@ -423,6 +423,39 @@ void CSHackCreator::Interface::Designer()
     ImNodes::EndCanvas();
 }
 
+const char* GetNodeTitle(int uiNodeType)
+{
+    switch (uiNodeType)
+    {
+        case NodeTypeButton:
+            return szButton;
+        case NodeTypeCheckBox:
+            return szCheckBox;
+        case NodeTypeComboBox:
+            return szComboBox;
+        case NodeTypeGroup:
+            return szGroupBox;
+        case NodeTypeNewLine:
+            return szNewLine;
+        case NodeTypeTabBar:
+            return szTabBar;
+        case NodeTypeTabItem:
+            return szTabItem;
+        case NodeTypeText:
+            return szText;
+        case NodeTypeToolTip:
+            return szToolTip;
+        case NodeTypeVariableEquals:
+            return szVariableEquals;
+        case NodeTypeVariableSetValue:
+            return szVariableSetValue;
+        case NodeTypeWindow:
+            return szWindow;
+        default:
+            return 0;
+    }
+}
+
 void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
 {
     int iNodesCount = 0;
