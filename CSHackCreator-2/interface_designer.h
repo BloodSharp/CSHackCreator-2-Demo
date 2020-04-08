@@ -67,7 +67,7 @@ struct MyNode
 
     /// Properties of each node
     char szText[MAX_PATH]; // Window title or simple text
-    unsigned int uiNodeType;
+    unsigned int uiNodeType = 0;
     double dbVariable = 0.0;
     int iVariable_1 = 0;
     int iVariable_2 = 0;
@@ -80,6 +80,7 @@ struct MyNode
         this->title = title;
         this->input_slots = input_slots;
         this->output_slots = output_slots;
+        this->szText[0] = 0;
     }
 
     explicit MyNode(const char* title,
@@ -91,6 +92,7 @@ struct MyNode
             this->input_slots = slots;
         else if (type == SlotTypeOutput)
             this->output_slots = slots;
+        this->szText[0] = 0;
     }
 
     /// Deletes connection from this node.
