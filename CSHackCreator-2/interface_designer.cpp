@@ -406,7 +406,6 @@ void CSHackCreator::Interface::Designer()
         {
             if (ImGui::MenuItem(desc.first.c_str()))
             {
-                desc.second()->szText[0] = 0;
                 CSHackCreator::Settings::Nodes.push_back(desc.second());
                 ImNodes::AutoPositionNode(CSHackCreator::Settings::Nodes.back());
             }
