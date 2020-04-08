@@ -467,7 +467,7 @@ void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
         int iNodeType = -1;
         const char* szNodeTitle = 0;
 
-        // Buscar el nodo por t�tulo y asignar constructor mapeado...
+        // Buscar el nodo por titulo y asignar constructor mapeado...
         GetVal(settings["Nodes"][std::to_string(i).c_str()]["Type"], &iNodeType);
         if (iNodeType == -1)
         {
