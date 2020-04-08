@@ -473,6 +473,42 @@ void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
                 }
             }
             settings["Nodes"][std::to_string(i).c_str()]["Connections"]["OutputsCount"] = CSHackCreator::Settings::Nodes[i]->connections.size() - iInputNode;
+
+            unsigned int iOutputNode = 0;
+            for (unsigned int j = 0; j < CSHackCreator::Settings::Nodes[i]->connections.size(); j++)
+            {
+                if (CSHackCreator::Settings::Nodes[i]->connections[j].output_node == CSHackCreator::Settings::Nodes[i])
+                {
+                    // Filtramos solo los inputs
+                    iOutputNode++;
+                    continue;
+                }
+
+                #ifdef _DEBUG
+                    settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j).c_str()]["SourceSlotName"] = CSHackCreator::Settings::Nodes[i]->connections[j].input_slot;
+                    settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j).c_str()]["TargetSlotName"] = CSHackCreator::Settings::Nodes[i]->connections[j].output_slot;
+                #endif
+
+                settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j).c_str()]["SourceNode"] = i;
+                for (unsigned int k = 0; k < CSHackCreator::Settings::Nodes.size(); k++)
+                {
+                    if (CSHackCreator::Settings::Nodes[i]->connections[j].output_node == CSHackCreator::Settings::Nodes[k])
+                    {
+                        settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j).c_str()]["TargetNode"] = k;
+                        for (unsigned int l = 0; l < CSHackCreator::Settings::Nodes[k]->output_slots.size(); l++)
+                            if (!strcmp(CSHackCreator::Settings::Nodes[k]->output_slots[l].title, CSHackCreator::Settings::Nodes[i]->connections[j].output_slot))
+                                settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j).c_str()]["TargetSlot"] = l;
+                    }
+                    else if (CSHackCreator::Settings::Nodes[i]->connections[j].input_node == CSHackCreator::Settings::Nodes[k])
+                    {
+                        for (unsigned int l = 0; l < CSHackCreator::Settings::Nodes[k]->input_slots.size(); l++)
+                            if (!strcmp(CSHackCreator::Settings::Nodes[k]->input_slots[l].title, CSHackCreator::Settings::Nodes[i]->connections[j].input_slot))
+                                settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Inputs"][std::to_string(j).c_str()]["SourceSlot"] = l;
+                    }
+                }
+            }
+
+            settings["Nodes"][std::to_string(i).c_str()]["Connections"]["InputsCount"] = CSHackCreator::Settings::Nodes[i]->connections.size() - iOutputNode;
         }
     }
 }
