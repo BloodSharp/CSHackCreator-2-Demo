@@ -118,5 +118,8 @@ namespace CSHackCreator
     namespace Settings
     {
         extern std::vector<MyNode*> Nodes;
+
+        void OpenNodes(Json::Value&settings);
+        void SaveNodes(Json::Value&settings);
     }
 }
