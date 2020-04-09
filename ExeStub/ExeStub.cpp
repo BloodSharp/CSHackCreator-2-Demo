@@ -5,8 +5,11 @@ static LPDIRECT3D9           g_pD3D = NULL;
 static LPDIRECT3DDEVICE9     g_pd3dDevice = NULL;
 static D3DPRESENT_PARAMETERS g_d3dpp = {};
 
-char* szTitle[MAX_PATH] = { 0 };
-char* szInjectButton[MAX_PATH] = { 0 };
+char szTitle[MAX_PATH];
+char szInjectButton[MAX_PATH];
+char szWaitForGame[MAX_PATH];
+char szInjectionError[MAX_PATH];
+
 int WINDOW_WIDTH = 400;
 int WINDOW_HEIGHT = 240;
 
