@@ -108,6 +108,7 @@ void CSHackCreator::Project::Build(HWND hwnd)
     std::fstream fsDll(CSHackCreator::Settings::szDllFile, std::fstream::out | std::fstream::binary);
 
     CSHackCreator::Settings::Save(settings);
+    CSHackCreator::Settings::SaveNodes(settings);
 
     if (fsExecutable.is_open())
     {
