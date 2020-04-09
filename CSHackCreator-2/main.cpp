@@ -111,6 +111,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     ImGui::Separator();
                     if (ImGui::MenuItem("Build"))
                         CSHackCreator::Project::Build(hwnd);
+                    if (ImGui::MenuItem("Decompile"))
+                        CSHackCreator::Project::Decompile(hwnd);
+                    ImGui::EndMenu();
                 }
                 if (ImGui::BeginMenu("Help"))
                 {

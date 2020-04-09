@@ -8,5 +8,6 @@ namespace CSHackCreator
 		void Open(HWND hwnd);
 		void Save(HWND hwnd);
 		void Build(HWND hwnd);
+		void Decompile(HWND hwnd);
 	}
 }

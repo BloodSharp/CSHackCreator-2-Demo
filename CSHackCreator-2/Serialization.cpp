@@ -138,3 +138,74 @@ void CSHackCreator::Project::Build(HWND hwnd)
 
     MessageBox(hwnd, "Done enjoy your new hack!", "BloodSharp", MB_ICONINFORMATION);
 }
+
+bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
+{
+    for (UINT i = 0; i < strlen((char*)string) + 1; i++)
+        if (string[i] != dwAddress[i])
+            return false;
+    return true;
+}
+
+void CSHackCreator::Project::Decompile(HWND hwnd)
+{
+    OPENFILENAME ofn;
+    char szFile[MAX_PATH] = { 0 };
+
+    // Initialize OPENFILENAME
+    ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = hwnd;
+    ofn.lpstrFile = szFile;
+    ofn.nMaxFile = sizeof(szFile);
+    ofn.lpstrFilter = "Hack files (*.dll)(*.exe)\0*.dll;*.exe\0All\0*.*\0\0";
+    ofn.nFilterIndex = 0;
+    ofn.lpstrFileTitle = NULL;
+    ofn.nMaxFileTitle = 0;
+    ofn.lpstrInitialDir = NULL;
+    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+    if (GetOpenFileName(&ofn) == TRUE)
+    {
+        std::ifstream fsHackFile;
+        fsHackFile.open(ofn.lpstrFile, std::ifstream::in | std::ifstream::binary);
+        if (fsHackFile.is_open())
+        {
+            DWORD dwFileSize;
+            fsHackFile.seekg(0, fsHackFile.end);
+            dwFileSize = (DWORD)fsHackFile.tellg();
+            if (dwFileSize)
+            {
+                fsHackFile.seekg(0, fsHackFile.beg);
+                PBYTE pFileBuffer = new BYTE[dwFileSize];
+                if (pFileBuffer)
+                {
+                    fsHackFile.read((char*)pFileBuffer, dwFileSize);
+
+                    for (PBYTE i = pFileBuffer; i < (PBYTE)(((DWORD)pFileBuffer) + dwFileSize); i++)
+                    {
+                        if (IsThisAddressContainString(i, (PBYTE)CSHACKCREATOR_V2_SIGNATURE))
+                        {
+                            Json::Value settings;
+                            Json::Reader reader;
+                            std::string jsonstring;
+
+                            i += strlen(CSHACKCREATOR_V2_SIGNATURE) + 1;
+                            jsonstring = ((const char*)i);
+                            if (reader.parse(jsonstring, settings))
+                            {
+                                CleanAllNodesAndConnections();
+                                CSHackCreator::Settings::Open(settings);
+                                CSHackCreator::Settings::OpenNodes(settings);
+                            }
+                            break;
+                        }
+                    }
+                    delete[]pFileBuffer;
+                }
+            }
+
+            fsHackFile.close();
+        }
+    }
+}
