@@ -1,180 +1,200 @@
-// ExeStub.cpp : Define el punto de entrada de la aplicación.
-//
-
-#include "framework.h"
 #include "ExeStub.h"
 
-#define MAX_LOADSTRING 100
+// Data
+static LPDIRECT3D9           g_pD3D = NULL;
+static LPDIRECT3DDEVICE9     g_pd3dDevice = NULL;
+static D3DPRESENT_PARAMETERS g_d3dpp = {};
 
-// Variables globales:
-HINSTANCE hInst;                                // instancia actual
-WCHAR szTitle[MAX_LOADSTRING];                  // Texto de la barra de título
-WCHAR szWindowClass[MAX_LOADSTRING];            // nombre de clase de la ventana principal
+char* szTitle[MAX_PATH] = { 0 };
+char* szInjectButton[MAX_PATH] = { 0 };
+int WINDOW_WIDTH = 400;
+int WINDOW_HEIGHT = 240;
 
-// Declaraciones de funciones adelantadas incluidas en este módulo de código:
-ATOM                MyRegisterClass(HINSTANCE hInstance);
-BOOL                InitInstance(HINSTANCE, int);
-LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+// Forward declarations of helper functions
+bool CreateDeviceD3D(HWND hWnd);
+void CleanupDeviceD3D();
+void ResetDevice();
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, bool bProcessMouse);
 
-int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-                     _In_opt_ HINSTANCE hPrevInstance,
-                     _In_ LPWSTR    lpCmdLine,
-                     _In_ int       nCmdShow)
+//int display_w, display_h;
+ATOM RegMyWindowClass(HINSTANCE hInst, LPCTSTR lpzClassName)
 {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+    WNDCLASS wcWindowClass = { 0 };
+    wcWindowClass.lpfnWndProc = (WNDPROC)WndProc;
+    wcWindowClass.style = CS_HREDRAW | CS_VREDRAW;
+    wcWindowClass.hInstance = hInst;
+    wcWindowClass.lpszClassName = lpzClassName;
+    wcWindowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wcWindowClass.hbrBackground = (HBRUSH)COLOR_APPWORKSPACE;
+    return RegisterClass(&wcWindowClass);
+}
 
-    // TODO: Colocar código aquí.
-
-    // Inicializar cadenas globales
-    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_EXESTUB, szWindowClass, MAX_LOADSTRING);
-    MyRegisterClass(hInstance);
-
-    // Realizar la inicialización de la aplicación:
-    if (!InitInstance (hInstance, nCmdShow))
+void RenderLoader(bool* pbOpen)
+{
+    //CH4::Interface::PushWindowsStyles();
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+    ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
+    if (ImGui::Begin((const char*)szTitle, pbOpen, ImGuiWindowFlags_NoResize |
+        ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
+        ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |
+        ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
-        return FALSE;
+        CH4::Interface::Particles::Render(35);
+        ImGui::Button((const char*)szInjectButton, ImVec2(ImGui::GetIO().DisplaySize.x - 17, 20));
+        ImGui::End();
     }
+    ImGui::PopStyleVar();
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 4.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 12.0f);
+    //Interface();
+    ImGui::PopStyleVar(2);
+}
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_EXESTUB));
+void InitializeLoader()
+{
+    ImGuiStyle& styles = ImGui::GetStyle();
+    styles.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+}
 
+// Main code
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+{
+    strcpy_s((char*)szTitle, MAX_PATH - 1, "Hello");
+    strcpy_s((char*)szInjectButton, MAX_PATH - 1, "Inject MyHack");
+    if (!RegMyWindowClass(hInstance, (LPCTSTR)szTitle))
+        return 0;
+    HWND hwnd = ::CreateWindowEx(0, (LPCSTR)szTitle, (LPCSTR)szTitle, WS_POPUP,//WS_OVERLAPPEDWINDOW,
+        GetSystemMetrics(SM_CXSCREEN) / 2 - WINDOW_WIDTH / 2,
+        GetSystemMetrics(SM_CYSCREEN) / 2 - WINDOW_HEIGHT / 2,
+        WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, hInstance, NULL);
+    // Initialize Direct3D
+    if (!CreateDeviceD3D(hwnd))
+    {
+        CleanupDeviceD3D();
+        ::UnregisterClass((LPCSTR)szTitle, hInstance);
+        return 1;
+    }
+    // Show the window
+    ::ShowWindow(hwnd, SW_SHOWDEFAULT);
+    ::UpdateWindow(hwnd);
+    // Setup Dear ImGui context
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    // Setup Dear ImGui style
+    //ImGui::StyleColorsDark();
+    ImGui::StyleColorsClassic();
+    InitializeLoader();
+    // Setup Platform/Renderer bindings
+    ImGui_ImplWin32_Init(hwnd);
+    ImGui_ImplDX9_Init(g_pd3dDevice);
+    // Main loop
     MSG msg;
-
-    // Bucle principal de mensajes:
-    while (GetMessage(&msg, nullptr, 0, 0))
+    ZeroMemory(&msg, sizeof(msg));
+    bool bOpen = true;
+    while (msg.message != WM_QUIT)
     {
-        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+        if (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
         {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
+            ::TranslateMessage(&msg);
+            ::DispatchMessage(&msg);
+            continue;
         }
+        // Start the Dear ImGui frame
+        ImGui_ImplDX9_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
+        if (!bOpen)
+            ExitProcess(0);
+        RenderLoader(&bOpen);
+        // Rendering
+        ImGui::EndFrame();
+        g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
+        g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
+        g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
+        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA(0, 0, 0, 255);
+        g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
+        if (g_pd3dDevice->BeginScene() >= 0)
+        {
+            ImGui::Render();
+            ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+            g_pd3dDevice->EndScene();
+        }
+        HRESULT result = g_pd3dDevice->Present(NULL, NULL, NULL, NULL);
+        // Handle loss of D3D9 device
+        if (result == D3DERR_DEVICELOST && g_pd3dDevice->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
+            ResetDevice();
     }
-
-    return (int) msg.wParam;
-}
-
-
-
-//
-//  FUNCIÓN: MyRegisterClass()
-//
-//  PROPÓSITO: Registra la clase de ventana.
-//
-ATOM MyRegisterClass(HINSTANCE hInstance)
-{
-    WNDCLASSEXW wcex;
-
-    wcex.cbSize = sizeof(WNDCLASSEX);
-
-    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-    wcex.lpfnWndProc    = WndProc;
-    wcex.cbClsExtra     = 0;
-    wcex.cbWndExtra     = 0;
-    wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_EXESTUB));
-    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_EXESTUB);
-    wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-
-    return RegisterClassExW(&wcex);
-}
-
-//
-//   FUNCIÓN: InitInstance(HINSTANCE, int)
-//
-//   PROPÓSITO: Guarda el identificador de instancia y crea la ventana principal
-//
-//   COMENTARIOS:
-//
-//        En esta función, se guarda el identificador de instancia en una variable común y
-//        se crea y muestra la ventana principal del programa.
-//
-BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-{
-   hInst = hInstance; // Almacenar identificador de instancia en una variable global
-
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-
-   if (!hWnd)
-   {
-      return FALSE;
-   }
-
-   ShowWindow(hWnd, nCmdShow);
-   UpdateWindow(hWnd);
-
-   return TRUE;
-}
-
-//
-//  FUNCIÓN: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  PROPÓSITO: Procesa mensajes de la ventana principal.
-//
-//  WM_COMMAND  - procesar el menú de aplicaciones
-//  WM_PAINT    - Pintar la ventana principal
-//  WM_DESTROY  - publicar un mensaje de salida y volver
-//
-//
-LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    switch (message)
-    {
-    case WM_COMMAND:
-        {
-            int wmId = LOWORD(wParam);
-            // Analizar las selecciones de menú:
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
-        }
-        break;
-    case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Agregar cualquier código de dibujo que use hDC aquí...
-            EndPaint(hWnd, &ps);
-        }
-        break;
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
-    default:
-        return DefWindowProc(hWnd, message, wParam, lParam);
-    }
+    ImGui_ImplDX9_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+    CleanupDeviceD3D();
+    ::DestroyWindow(hwnd);
+    ::UnregisterClass((LPCSTR)szTitle, hInstance);
     return 0;
 }
 
-// Controlador de mensajes del cuadro Acerca de.
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-{
-    UNREFERENCED_PARAMETER(lParam);
-    switch (message)
-    {
-    case WM_INITDIALOG:
-        return (INT_PTR)TRUE;
+// Helper functions
 
-    case WM_COMMAND:
-        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+bool CreateDeviceD3D(HWND hWnd)
+{
+    if ((g_pD3D = Direct3DCreate9(D3D_SDK_VERSION)) == NULL)
+        return false;
+    // Create the D3DDevice
+    ZeroMemory(&g_d3dpp, sizeof(g_d3dpp));
+    g_d3dpp.Windowed = TRUE;
+    g_d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    g_d3dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+    g_d3dpp.EnableAutoDepthStencil = TRUE;
+    g_d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
+    g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;           // Present with vsync
+    //g_d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;   // Present without vsync, maximum unthrottled framerate
+    if (g_pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, &g_d3dpp, &g_pd3dDevice) < 0)
+        return false;
+
+    return true;
+}
+
+void CleanupDeviceD3D()
+{
+    if (g_pd3dDevice) { g_pd3dDevice->Release(); g_pd3dDevice = NULL; }
+    if (g_pD3D) { g_pD3D->Release(); g_pD3D = NULL; }
+}
+
+void ResetDevice()
+{
+    ImGui_ImplDX9_InvalidateDeviceObjects();
+    HRESULT hr = g_pd3dDevice->Reset(&g_d3dpp);
+    if (hr == D3DERR_INVALIDCALL)
+        IM_ASSERT(0);
+    ImGui_ImplDX9_CreateDeviceObjects();
+}
+
+// Win32 message handler
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam, true))
+        return true;
+    switch (msg)
+    {
+    case WM_SIZE:
+        if (g_pd3dDevice != NULL && wParam != SIZE_MINIMIZED)
         {
-            EndDialog(hDlg, LOWORD(wParam));
-            return (INT_PTR)TRUE;
+            g_d3dpp.BackBufferWidth = LOWORD(lParam);
+            g_d3dpp.BackBufferHeight = HIWORD(lParam);
+            ResetDevice();
         }
+        return 0;
+    case WM_SYSCOMMAND:
+        if ((wParam & 0xfff0) == SC_KEYMENU) // Disable ALT application menu
+            return 0;
         break;
+    case WM_DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
     }
-    return (INT_PTR)FALSE;
+    return ::DefWindowProc(hWnd, msg, wParam, lParam);
 }
