@@ -61,6 +61,9 @@ void InitializeLoader()
 {
     ImGuiStyle& styles = ImGui::GetStyle();
     styles.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+    styles.Colors[ImGuiCol_Button].w = 1.0f;
+    styles.Colors[ImGuiCol_ButtonActive].w = 1.0f;
+    styles.Colors[ImGuiCol_ButtonHovered].w = 1.0f;
 }
 
 // Main code
