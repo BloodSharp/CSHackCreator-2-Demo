@@ -1,5 +1,7 @@
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
+#include <fstream>
 #include <Windows.h>
 #include <windef.h>
 #define DIRECT3D_VERSION  0x0900
@@ -14,3 +16,5 @@
 #include "JSON/json-forwards.h"
 
 #include "ch4_gen_particles.h"
+
+#include "xorstr.h"
