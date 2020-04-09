@@ -13,6 +13,8 @@ char szInjectionError[MAX_PATH];
 int WINDOW_WIDTH = 400;
 int WINDOW_HEIGHT = 240;
 
+#define CSHACKCREATOR_V2_SIGNATURE /*<(BLOODSHARP_CSHACKCREATOR_V2)>*/XorStr<0xB4,32,0x84103E60>("\x88\x9D\xF4\xFB\xF7\xF6\xFE\xE8\xF4\xFC\xEC\xEF\x9F\x82\x91\x8B\x85\x86\x8D\x84\x9A\x8C\x8B\x9F\x83\x9F\x91\x99\xE2\xF8\xEC"+0x84103E60).s
+
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
 void CleanupDeviceD3D();
