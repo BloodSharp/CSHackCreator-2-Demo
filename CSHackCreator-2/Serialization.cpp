@@ -92,24 +92,45 @@ void CSHackCreator::Project::Save(HWND hwnd)
     }
 }
 
+#define CSHACKCREATOR_V2_SIGNATURE "<(BLOODSHARP_CSHACKCREATOR_V2)>"
+
 void CSHackCreator::Project::Build(HWND hwnd)
 {
+    HRSRC hResource;
+    DWORD dwResourceSize;
+    HGLOBAL hGlob;
+    LPSTR lpBuffer;
+
     Json::Value settings;
     Json::FastWriter fastWriter;
 
-    std::fstream fsExecutable(CSHackCreator::Settings::szExeFile, std::fstream::in | std::fstream::out | std::fstream::app | std::fstream::binary);
-    std::fstream fsDll(CSHackCreator::Settings::szDllFile, std::fstream::in | std::fstream::out | std::fstream::app | std::fstream::binary);
+    std::fstream fsExecutable(CSHackCreator::Settings::szExeFile, std::fstream::out | std::fstream::binary);
+    std::fstream fsDll(CSHackCreator::Settings::szDllFile, std::fstream::out | std::fstream::binary);
 
     CSHackCreator::Settings::Save(settings);
 
     if (fsExecutable.is_open())
     {
+        hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_EXE_STUB), "EXE_STUB");
+        dwResourceSize = SizeofResource(NULL, hResource);
+        hGlob = LoadResource(NULL, hResource);
+        lpBuffer = (LPSTR)LockResource(hGlob);
+
+        fsExecutable.write(lpBuffer, dwResourceSize);
+        fsExecutable.write(CSHACKCREATOR_V2_SIGNATURE, strlen(CSHACKCREATOR_V2_SIGNATURE) + 1);
         fsExecutable << fastWriter.write(settings);
         fsExecutable.close();
     }
 
     if(fsDll.is_open())
     {
+        hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_DLL_STUB), "DLL_STUB");
+        dwResourceSize = SizeofResource(NULL, hResource);
+        hGlob = LoadResource(NULL, hResource);
+        lpBuffer = (LPSTR)LockResource(hGlob);
+
+        fsDll.write(lpBuffer, dwResourceSize);
+        fsDll.write(CSHACKCREATOR_V2_SIGNATURE, strlen(CSHACKCREATOR_V2_SIGNATURE) + 1);
         fsDll << fastWriter.write(settings);
         fsDll.close();
     }
