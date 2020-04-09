@@ -66,11 +66,78 @@ void InitializeLoader()
     styles.Colors[ImGuiCol_ButtonHovered].w = 1.0f;
 }
 
+void GetVal(Json::Value& config, char* setting, int bufferSize)
+{
+    if (config.isNull())
+        return;
+
+    strcpy_s(setting, bufferSize, config.asCString());
+}
+
+bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
+{
+    for (UINT i = 0; i < strlen((char*)string) + 1; i++)
+        if (string[i] != dwAddress[i])
+            return false;
+    return true;
+}
+
+void InitializeProgram(HINSTANCE hInstance)
+{
+    Json::Value settings;
+    Json::Reader reader;
+    std::string jsonstring;
+    PBYTE pFileBuffer = 0;
+    DWORD dwFileSize = 0;
+    char szProgramFile[MAX_PATH];
+    std::ifstream fsFile;
+
+    // Valores por defecto...
+    strcpy_s(szTitle, MAX_PATH - 1, /*MyHack*/XorStr<0x2B, 7, 0xB08C9101>("\x66\x55\x65\x4F\x4C\x5B" + 0xB08C9101).s);
+    strcpy_s(szInjectButton, MAX_PATH - 1, /*Inject MyHack*/XorStr<0x2A, 14, 0xF42F84B4>("\x63\x45\x46\x48\x4D\x5B\x10\x7C\x4B\x7B\x55\x56\x5D" + 0xF42F84B4).s);
+    strcpy_s(szWaitForGame, MAX_PATH - 1, /*Waiting for the game to inject...*/XorStr<0x23, 34, 0x93144A54>("\x74\x45\x4C\x52\x4E\x46\x4E\x0A\x4D\x43\x5F\x0E\x5B\x58\x54\x12\x54\x55\x58\x53\x17\x4C\x56\x1A\x52\x52\x57\x5B\x5C\x34\x6F\x6C\x6D" + 0x93144A54).s);
+    strcpy_s(szInjectionError, MAX_PATH - 1, /*Injection error!*/XorStr<0xD0, 17, 0x17BAFF77>("\x99\xBF\xB8\xB6\xB7\xA1\xBF\xB8\xB6\xF9\xBF\xA9\xAE\xB2\xAC\xFE" + 0x17BAFF77).s);
+
+    GetModuleFileName(hInstance, szProgramFile, MAX_PATH - 1);
+    fsFile.open(szProgramFile, std::ifstream::in | std::ifstream::binary);
+    if (fsFile.is_open())
+    {
+        fsFile.seekg(0, fsFile.end);
+        dwFileSize = (DWORD)fsFile.tellg();
+
+        if (dwFileSize)
+        {
+            fsFile.seekg(0, fsFile.beg);
+            pFileBuffer = new BYTE[dwFileSize];
+            if (pFileBuffer)
+            {
+                fsFile.read((char*)pFileBuffer, dwFileSize);
+                for (PBYTE i = pFileBuffer; i < (PBYTE)(((DWORD)pFileBuffer) + dwFileSize); i++)
+                {
+                    if (IsThisAddressContainString(i, (PBYTE)CSHACKCREATOR_V2_SIGNATURE))
+                    {
+                        i += strlen(CSHACKCREATOR_V2_SIGNATURE) + 1;
+                        jsonstring = ((const char*)i);
+                        if (reader.parse(jsonstring, settings))
+                        {
+                            GetVal(settings["Loader"]["Title"], szTitle, MAX_PATH - 1);
+                            GetVal(settings["Loader"]["Inject"], szInjectButton, MAX_PATH - 1);
+                            GetVal(settings["Loader"]["WaitingForTheGame"], szWaitForGame, MAX_PATH - 1);
+                            GetVal(settings["Loader"]["InjectionError"], szInjectionError, MAX_PATH - 1);
+                        }
+                        break;
+                    }
+                }
+                delete[]pFileBuffer;
+            }
+        }
+    }
+}
+
 // Main code
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-    strcpy_s((char*)szTitle, MAX_PATH - 1, "Hello");
-    strcpy_s((char*)szInjectButton, MAX_PATH - 1, "Inject MyHack");
+    InitializeProgram(hInstance);
     if (!RegMyWindowClass(hInstance, (LPCTSTR)szTitle))
         return 0;
     HWND hwnd = ::CreateWindowEx(0, (LPCSTR)szTitle, (LPCSTR)szTitle, WS_POPUP,//WS_OVERLAPPEDWINDOW,
