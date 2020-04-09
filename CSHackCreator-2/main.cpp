@@ -111,6 +111,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                     ImGui::Separator();
                     if (ImGui::MenuItem("Build"))
                         CSHackCreator::Project::Build(hwnd);
+                }
+                if (ImGui::BeginMenu("Help"))
+                {
+                    if (ImGui::MenuItem("Designer help"))
+                    {
+                        MessageBox(hwnd,
+                            "Usage:\n\n"
+                            "Right mouse button: Display nodes popup menu.\n"
+                            "Middle mouse button: Move around the canvas.\n"
+                            "Double left mouse click: Delete connections.\n"
+                            "Delete key: Delete selected node.", "CSHackCreator - BloodSharp", MB_ICONINFORMATION);
+                    }
+                    ImGui::Separator();
+                    if (ImGui::MenuItem("About"))
+                    {
+                        MessageBox(hwnd,
+                            "Coded by Agustin Alejandro dos Santos in Argentina\n\n"
+                            "Credits:\n"
+                            "Omar Cornunt from Dear ImGui library.\n"
+                            "Baptiste Lepilleur from JSONCPP library.\n"
+                            "And many people from Gamedeception.net community...", "CSHackCreator - BloodSharp", MB_ICONINFORMATION);
+                    }
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
