@@ -25,3 +25,6 @@
 #include "interface_designer.h"
 #include "Serialization.h"
 #include "Settings.h"
+
+#define IDR_DLL_STUB 400
+#define IDR_EXE_STUB 401
