@@ -154,6 +154,9 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bass\bass.h" />
+    <ClInclude Include="Bass\dll.h" />
+    <ClInclude Include="ch4_radio_windows.h" />
     <ClInclude Include="CSHackCreator.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
@@ -172,6 +175,9 @@
     <ClInclude Include="Settings.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bass\dll.cpp" />
+    <ClCompile Include="Bass\dll_image.cpp" />
+    <ClCompile Include="ch4_radio_windows.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />

@@ -25,6 +25,12 @@
     <Filter Include="Archivos de encabezado\JSON">
       <UniqueIdentifier>{1d668be8-d6c8-41cd-b8f3-6847b804d3b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Archivos de origen\Bass">
+      <UniqueIdentifier>{85888959-f10d-4521-af3a-799e6578d443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Bass">
+      <UniqueIdentifier>{5752be7d-104b-4761-a020-628e2f8a6dcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CSHackCreator-2.rc">
@@ -88,6 +94,15 @@
     <ClInclude Include="Settings.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="ch4_radio_windows.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Bass\bass.h">
+      <Filter>Archivos de encabezado\Bass</Filter>
+    </ClInclude>
+    <ClInclude Include="Bass\dll.h">
+      <Filter>Archivos de encabezado\Bass</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImGui\imgui.cpp">
@@ -128,6 +143,15 @@
     </ClCompile>
     <ClCompile Include="ImGui\imgui_demo.cpp">
       <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ch4_radio_windows.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="Bass\dll.cpp">
+      <Filter>Archivos de origen\Bass</Filter>
+    </ClCompile>
+    <ClCompile Include="Bass\dll_image.cpp">
+      <Filter>Archivos de origen\Bass</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

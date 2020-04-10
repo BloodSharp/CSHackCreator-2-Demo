@@ -27,5 +27,7 @@
 #include "Serialization.h"
 #include "Settings.h"
 
+#include "ch4_radio_windows.h"
+
 #define IDR_DLL_STUB 400
 #define IDR_EXE_STUB 401
