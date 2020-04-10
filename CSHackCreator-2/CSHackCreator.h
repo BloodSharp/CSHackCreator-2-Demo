@@ -29,5 +29,7 @@
 
 #include "ch4_radio_windows.h"
 
+#include "xorstr.h"
+
 #define IDR_DLL_STUB 400
 #define IDR_EXE_STUB 401

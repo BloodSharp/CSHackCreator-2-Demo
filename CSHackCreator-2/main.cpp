@@ -46,6 +46,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     ::UpdateWindow(hwnd);
 
     CSHackCreator::Settings::New();
+    CH4::Radio::Initialize();
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -163,6 +164,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
         // Rendering
         ImGui::EndFrame();
+
+        CH4::Radio::Play();
+
         g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
         g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, FALSE);
         g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, FALSE);
