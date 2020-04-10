@@ -91,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
         ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
         //const ImGuiStyle& style = ImGui::GetStyle();
-        if (ImGui::Begin("CSHackCreator", nullptr,
+        if (ImGui::Begin(/*CSHackCreator*/XorStr<0xF9, 14, 0x32B4D256>("\xBA\xA9\xB3\x9D\x9E\x95\xBC\x72\x64\x63\x77\x6B\x77" + 0x32B4D256).s, nullptr,
             ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_MenuBar |
             ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
             ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
@@ -101,55 +101,55 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
             if (ImGui::BeginMenuBar())
             {
-                if (ImGui::BeginMenu("Project"))
+                if (ImGui::BeginMenu(/*Project*/XorStr<0x19, 8, 0x151F9396>("\x49\x68\x74\x76\x78\x7D\x6B" + 0x151F9396).s))
                 {
-                    if (ImGui::MenuItem("New"))
+                    if (ImGui::MenuItem(/*New*/XorStr<0x66, 4, 0xBF259BAF>("\x28\x02\x1F" + 0xBF259BAF).s))
                         CSHackCreator::Project::New();
-                    if (ImGui::MenuItem("Open"))
+                    if (ImGui::MenuItem(/*Open*/XorStr<0xBE, 5, 0x93BE5D6D>("\xF1\xCF\xA5\xAF" + 0x93BE5D6D).s))
                         CSHackCreator::Project::Open(hwnd);
-                    if (ImGui::MenuItem("Save"))
+                    if (ImGui::MenuItem(/*Save*/XorStr<0x48, 5, 0xB9028F42>("\x1B\x28\x3C\x2E" + 0xB9028F42).s))
                         CSHackCreator::Project::Save(hwnd);
                     ImGui::Separator();
-                    if (ImGui::MenuItem("Build"))
+                    if (ImGui::MenuItem(/*Build*/XorStr<0x8F, 6, 0xC92D86F6>("\xCD\xE5\xF8\xFE\xF7" + 0xC92D86F6).s))
                         CSHackCreator::Project::Build(hwnd);
-                    if (ImGui::MenuItem("Decompile"))
+                    if (ImGui::MenuItem(/*Decompile*/XorStr<0x0D, 10, 0xEC36BFAD>("\x49\x6B\x6C\x7F\x7C\x62\x7A\x78\x70" + 0xEC36BFAD).s))
                         CSHackCreator::Project::Decompile(hwnd);
                     ImGui::EndMenu();
                 }
-                if (ImGui::BeginMenu("Help"))
+                if (ImGui::BeginMenu(/*Help*/XorStr<0xF1, 5, 0xBD0C97EC>("\xB9\x97\x9F\x84" + 0xBD0C97EC).s))
                 {
-                    if (ImGui::MenuItem("Designer help"))
+                    if (ImGui::MenuItem(/*Designer help*/XorStr<0xAF, 14, 0x85E2EAC4>("\xEB\xD5\xC2\xDB\xD4\xDA\xD0\xC4\x97\xD0\xDC\xD6\xCB" + 0x85E2EAC4).s))
                     {
                         MessageBox(hwnd,
                             "Usage:\n\n"
                             "Right mouse button: Display nodes popup menu.\n"
                             "Middle mouse button: Move around the canvas.\n"
                             "Double left mouse click: Delete connections.\n"
-                            "Delete key: Delete selected node.", "CSHackCreator - BloodSharp", MB_ICONINFORMATION);
+                            "Delete key: Delete selected node.", /*CSHackCreator v2 - BloodSharp*/XorStr<0x5C, 30, 0x8325D1DD>("\x1F\x0E\x16\x3E\x03\x0A\x21\x11\x01\x04\x12\x08\x1A\x49\x1C\x59\x4C\x40\x4E\x2D\x1C\x1E\x1D\x17\x27\x1D\x17\x05\x08" + 0x8325D1DD).s, MB_ICONINFORMATION);
                     }
                     ImGui::Separator();
-                    if (ImGui::MenuItem("About"))
+                    if (ImGui::MenuItem(/*About*/XorStr<0x5C, 6, 0x0C638648>("\x1D\x3F\x31\x2A\x14" + 0x0C638648).s))
                     {
                         MessageBox(hwnd,
                             "Coded by Agustin Alejandro dos Santos in Argentina\n\n"
                             "Credits:\n"
-                            "Omar Cornunt from Dear ImGui library.\n"
+                            "Omar Cornut from Dear ImGui library.\n"
                             "Baptiste Lepilleur from JSONCPP library.\n"
-                            "And many people from Gamedeception.net community...", "CSHackCreator - BloodSharp", MB_ICONINFORMATION);
+                            "And many people from Gamedeception.net community...", /*CSHackCreator v2 - BloodSharp*/XorStr<0x45, 30, 0xAEAA793F>("\x06\x15\x0F\x29\x2A\x21\x08\x3E\x28\x2F\x3B\x3F\x23\x72\x25\x66\x75\x7B\x77\x1A\x35\x35\x34\x38\x0E\x36\x3E\x12\x11" + 0xAEAA793F).s, MB_ICONINFORMATION);
                     }
                     ImGui::EndMenu();
                 }
                 ImGui::EndMenuBar();
             }
 
-            if (ImGui::BeginTabBar("CSHackCreator - TabBar"))
+            if (ImGui::BeginTabBar(/*CSHackCreator - TabBar*/XorStr<0xCB, 23, 0x7F7F1E1E>("\x88\x9F\x85\xAF\xAC\xBB\x92\xA0\xB6\xB5\xA1\xB9\xA5\xF8\xF4\xFA\x8F\xBD\xBF\x9C\xBE\x92" + 0x7F7F1E1E).s))
             {
-                if (ImGui::BeginTabItem("Settings"))
+                if (ImGui::BeginTabItem(/*Settings*/XorStr<0xD1, 9, 0x7EC68449>("\x82\xB7\xA7\xA0\xBC\xB8\xB0\xAB" + 0x7EC68449).s))
                 {
                     CSHackCreator::Interface::Settings();
                     ImGui::EndTabItem();
                 }
-                if (ImGui::BeginTabItem("Designer"))
+                if (ImGui::BeginTabItem(/*Designer*/XorStr<0xB9, 9, 0xD120C7B2>("\xFD\xDF\xC8\xD5\xDA\xD0\xDA\xB2" + 0xD120C7B2).s))
                 {
                     CSHackCreator::Interface::Designer();
                     ImGui::EndTabItem();

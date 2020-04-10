@@ -92,7 +92,7 @@ void CSHackCreator::Project::Save(HWND hwnd)
     }
 }
 
-#define CSHACKCREATOR_V2_SIGNATURE "<(BLOODSHARP_CSHACKCREATOR_V2)>"
+#define CSHACKCREATOR_V2_SIGNATURE /*<(BLOODSHARP_CSHACKCREATOR_V2)>*/XorStr<0xD2,32,0xCB7E3612>("\xEE\xFB\x96\x99\x99\x98\x9C\x8A\x92\x9A\x8E\x8D\x81\x9C\xB3\xA9\xA3\xA0\xAF\xA6\xB4\xA2\xA9\xBD\xA5\xB9\xB3\xBB\xDC\xC6\xCE"+0xCB7E3612).s
 
 void CSHackCreator::Project::Build(HWND hwnd)
 {
@@ -112,7 +112,7 @@ void CSHackCreator::Project::Build(HWND hwnd)
 
     if (fsExecutable.is_open())
     {
-        hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_EXE_STUB), "EXE_STUB");
+        hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_EXE_STUB), /*EXE_STUB*/XorStr<0xA9, 9, 0x4799BEAD>("\xEC\xF2\xEE\xF3\xFE\xFA\xFA\xF2" + 0x4799BEAD).s);
         dwResourceSize = SizeofResource(NULL, hResource);
         hGlob = LoadResource(NULL, hResource);
         lpBuffer = (LPSTR)LockResource(hGlob);
@@ -125,7 +125,7 @@ void CSHackCreator::Project::Build(HWND hwnd)
 
     if(fsDll.is_open())
     {
-        hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_DLL_STUB), "DLL_STUB");
+        hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_DLL_STUB), /*DLL_STUB*/XorStr<0x39, 9, 0xDBF4E089>("\x7D\x76\x77\x63\x6E\x6A\x6A\x02" + 0xDBF4E089).s);
         dwResourceSize = SizeofResource(NULL, hResource);
         hGlob = LoadResource(NULL, hResource);
         lpBuffer = (LPSTR)LockResource(hGlob);
@@ -136,7 +136,7 @@ void CSHackCreator::Project::Build(HWND hwnd)
         fsDll.close();
     }
 
-    MessageBox(hwnd, "Done enjoy your new hack!", "BloodSharp", MB_ICONINFORMATION);
+    MessageBox(hwnd, /*Done enjoy your new hack!*/XorStr<0x1A, 26, 0x5670094F>("\x5E\x74\x72\x78\x3E\x7A\x4E\x4B\x4D\x5A\x04\x5C\x49\x52\x5A\x09\x44\x4E\x5B\x0D\x46\x4E\x53\x5A\x13" + 0x5670094F).s, /*CSHackCreator v2 - BloodSharp*/XorStr<0xCB, 30, 0x38F92DF7>("\x88\x9F\x85\xAF\xAC\xBB\x92\xA0\xB6\xB5\xA1\xB9\xA5\xF8\xAF\xE8\xFB\xF1\xFD\x9C\xB3\x8F\x8E\x86\xB0\x8C\x84\x94\x97" + 0x38F92DF7).s, MB_ICONINFORMATION);
 }
 
 bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
