@@ -5,6 +5,10 @@ char CSHackCreator::Settings::Loader::szInject[MAX_PATH];
 char CSHackCreator::Settings::Loader::szWaitingForInjection[MAX_PATH];
 char CSHackCreator::Settings::Loader::szInjectionError[MAX_PATH];
 
+bool CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ALL];
+int  CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_ALL];
+int  CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_ALL];
+
 char CSHackCreator::Settings::szExeFile[MAX_PATH];
 char CSHackCreator::Settings::szDllFile[MAX_PATH];
 char CSHackCreator::Settings::szConfigFile[MAX_PATH];
@@ -69,6 +73,26 @@ void CSHackCreator::Settings::New()
 	strcpy_s(CSHackCreator::Settings::Loader::szInject, MAX_PATH - 1, /*Inject MyHack*/XorStr<0x13, 14, 0x82A9F5E6>("\x5A\x7A\x7F\x73\x74\x6C\x39\x57\x62\x54\x7C\x7D\x74" + 0x82A9F5E6).s);
 	strcpy_s(CSHackCreator::Settings::Loader::szWaitingForInjection, MAX_PATH - 1, /*Waiting for the game to inject...*/XorStr<0xCC, 34, 0x1505011D>("\x9B\xAC\xA7\xBB\xB9\xBF\xB5\xF3\xB2\xBA\xA4\xF7\xAC\xB1\xBF\xFB\xBB\xBC\xB3\xBA\xC0\x95\x8D\xC3\x8D\x8B\x8C\x82\x8B\x9D\xC4\xC5\xC2" + 0x1505011D).s);
 	strcpy_s(CSHackCreator::Settings::Loader::szInjectionError, MAX_PATH - 1, /*Injection error!*/XorStr<0xD2, 17, 0x459D0313>("\x9B\xBD\xBE\xB0\xB5\xA3\xB1\xB6\xB4\xFB\xB9\xAF\xAC\xB0\x92\xC0" + 0x459D0313).s);
+
+	// Library
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] = false;
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE] = false;
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH] = false;
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SKY] = false;
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ESP_BOX] = false;
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_BUNNY_HOP] = false;
+	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ZOOM] = false;
+
+	CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_WALLHACK] = 0;
+	CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS] = 0;
+	CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS] = 0;
+	CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM] = 0;
+
+	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL] = 0;
+	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREMODELS] = 0;
+	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_CROSSHAIR] = 0;
+	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_NORECOIL] = 0;
+	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_SPEEDHACK] = 0;
 }
 
 void CSHackCreator::Settings::Open(Json::Value&settings)
@@ -83,6 +107,26 @@ void CSHackCreator::Settings::Open(Json::Value&settings)
 	GetVal(settings["Loader"]["Inject"], CSHackCreator::Settings::Loader::szInject, MAX_PATH - 1);
 	GetVal(settings["Loader"]["WaitingForTheGame"], CSHackCreator::Settings::Loader::szWaitingForInjection, MAX_PATH - 1);
 	GetVal(settings["Loader"]["InjectionError"], CSHackCreator::Settings::Loader::szInjectionError, MAX_PATH - 1);
+
+	// Library
+	GetVal(settings["Library"]["MasterSwitch"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH]);
+	GetVal(settings["Library"]["NoSmoke"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE]);
+	GetVal(settings["Library"]["NoFlash"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH]);
+	GetVal(settings["Library"]["NoSky"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SKY]);
+	GetVal(settings["Library"]["EspBox"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ESP_BOX]);
+	GetVal(settings["Library"]["BunnyHop"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_BUNNY_HOP]);
+	GetVal(settings["Library"]["Zoom"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ZOOM]);
+
+	GetVal(settings["Library"]["WallHack"], &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_WALLHACK]);
+	GetVal(settings["Library"]["ExtraWalls"], &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS]);
+	GetVal(settings["Library"]["ExtraModels"], &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS]);
+	GetVal(settings["Library"]["AimTeam"], &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM]);
+
+	GetVal(settings["Library"]["WireFrameWall"], &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL]);
+	GetVal(settings["Library"]["WireModels"], &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREMODELS]);
+	GetVal(settings["Library"]["CrossHair"], &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_CROSSHAIR]);
+	GetVal(settings["Library"]["Recoil"], &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_NORECOIL]);
+	GetVal(settings["Library"]["Speed"], &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_SPEEDHACK]);
 }
 
 void CSHackCreator::Settings::Save(Json::Value&settings)
@@ -97,6 +141,26 @@ void CSHackCreator::Settings::Save(Json::Value&settings)
 	settings["Loader"]["Inject"] = CSHackCreator::Settings::Loader::szInject;
 	settings["Loader"]["WaitingForTheGame"] = CSHackCreator::Settings::Loader::szWaitingForInjection;
 	settings["Loader"]["InjectionError"] = CSHackCreator::Settings::Loader::szInjectionError;
+
+	// Library
+	settings["Library"]["MasterSwitch"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH];
+	settings["Library"]["NoSmoke"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE];
+	settings["Library"]["NoFlash"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH];
+	settings["Library"]["NoSky"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SKY];
+	settings["Library"]["EspBox"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ESP_BOX];
+	settings["Library"]["BunnyHop"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_BUNNY_HOP];
+	settings["Library"]["Zoom"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ZOOM];
+
+	settings["Library"]["WallHack"] = CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_WALLHACK];
+	settings["Library"]["ExtraWalls"] = CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS];
+	settings["Library"]["ExtraModels"] = CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS];
+	settings["Library"]["AimTeam"] = CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM];
+
+	settings["Library"]["WireFrameWall"] = CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL];
+	settings["Library"]["WireModels"] = CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREMODELS];
+	settings["Library"]["CrossHair"] = CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_CROSSHAIR];
+	settings["Library"]["Recoil"] = CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_NORECOIL];
+	settings["Library"]["Speed"] = CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_SPEEDHACK];
 }
 
 void CSHackCreator::Interface::Settings()
@@ -153,6 +217,34 @@ void CSHackCreator::Interface::Settings()
 
 	if (ImGui::CollapsingHeader(/*DLL default settings*/XorStr<0xF6, 21, 0xEA8CA877>("\xB2\xBB\xB4\xD9\x9E\x9E\x9A\x9C\x8B\x93\x74\x21\x71\x66\x70\x71\x6F\x69\x6F\x7A" + 0xEA8CA877).s, ImGuiTreeNodeFlags_DefaultOpen))
 	{
+		ImGui::Checkbox(/*Master Switch*/XorStr<0xF5, 14, 0x03D0402E>("\xB8\x97\x84\x8C\x9C\x88\xDB\xAF\x8A\x97\x8B\x63\x69" + 0x03D0402E).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH]);
+		ImGui::Separator();
+		ImGui::BeginGroup();
+		ImGui::Checkbox(/*No Smoke*/XorStr<0xC9, 9, 0x02D7C8F8>("\x87\xA5\xEB\x9F\xA0\xA1\xA4\xB5" + 0x02D7C8F8).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE]);
+		ImGui::Checkbox(/*No Flash*/XorStr<0x49, 9, 0x4E30F6DC>("\x07\x25\x6B\x0A\x21\x2F\x3C\x38" + 0x4E30F6DC).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH]);
+		ImGui::Checkbox(/*No Sky*/XorStr<0xFF, 7, 0xD6A5E21C>("\xB1\x6F\x21\x51\x68\x7D" + 0xD6A5E21C).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_NO_SKY]);
+		ImGui::EndGroup();
+
+		ImGui::SameLine();
+		ImGui::BeginGroup();
+		ImGui::Checkbox(/*ESP Box*/XorStr<0xB1, 8, 0x4560A231>("\xF4\xE1\xE3\x94\xF7\xD9\xCF" + 0x4560A231).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ESP_BOX]);
+		ImGui::Checkbox(/*Bunny Hop*/XorStr<0x6C, 10, 0x5BB14CFD>("\x2E\x18\x00\x01\x09\x51\x3A\x1C\x04" + 0x5BB14CFD).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_BUNNY_HOP]);
+		ImGui::Checkbox(/*Zoom*/XorStr<0xE6, 5, 0xF5C3C47A>("\xBC\x88\x87\x84" + 0xF5C3C47A).s, &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ZOOM]);
+		ImGui::EndGroup();
+
+		ImGui::PushItemWidth(105);
+		ImGui::Combo(/*Wall Hack*/XorStr<0xB9, 10, 0x9E958137>("\xEE\xDB\xD7\xD0\x9D\xF6\xDE\xA3\xAA" + 0x9E958137).s, &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_WALLHACK], /*Disabled\0Models\0Transparent\0Wireframe\0\0*/XorStr<0xD9, 40, 0x24A3BBFD>("\x9D\xB3\xA8\xBD\xBF\xB2\xBA\x84\xE1\xAF\x8C\x80\x80\x8A\x94\xE8\xBD\x98\x8A\x82\x9E\x9E\x8E\x82\x94\x9C\x87\xF4\xA2\x9F\x85\x9D\x9F\x88\x9A\x91\x98\xFE\xFF" + 0x24A3BBFD).s);
+		ImGui::Combo(/*Extra Walls*/XorStr<0x2C, 12, 0x668204E6>("\x69\x55\x5A\x5D\x51\x11\x65\x52\x58\x59\x45" + 0x668204E6).s, &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS], /*Disabled\0Full Bright\0White Walls\0Night Mode\0\0*/XorStr<0x49, 46, 0x06ACEC05>("\x0D\x23\x38\x2D\x2F\x22\x2A\x34\x51\x14\x26\x38\x39\x76\x15\x2A\x30\x3D\x33\x28\x5D\x09\x37\x09\x15\x07\x43\x33\x04\x0A\x0B\x1B\x69\x24\x02\x0B\x05\x1A\x4F\x3D\x1E\x16\x16\x74\x75" + 0x06ACEC05).s);
+		ImGui::Combo(/*Extra Models*/XorStr<0x27, 13, 0xE10FB907>("\x62\x50\x5D\x58\x4A\x0C\x60\x41\x4B\x55\x5D\x41" + 0xE10FB907).s, &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS], /*Disabled\0Lambert\0Dark\0Colored\0\0*/XorStr<0x30, 32, 0xB964B414>("\x74\x58\x41\x52\x56\x59\x53\x53\x38\x75\x5B\x56\x5E\x58\x4C\x4B\x40\x05\x23\x31\x2F\x45\x05\x28\x24\x26\x38\x2E\x28\x4D\x4E" + 0xB964B414).s);
+		ImGui::Combo(/*Aim Team*/XorStr<0x78, 9, 0x8F0DCED1>("\x39\x10\x17\x5B\x28\x18\x1F\x12" + 0x8F0DCED1).s, &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM], /*Disabled\0CTs\0TTs\0\0*/XorStr<0xAF, 19, 0xAE69E67D>("\xEB\xD9\xC2\xD3\xD1\xD8\xD0\xD2\xB7\xFB\xED\xC9\xBB\xE8\xE9\xCD\xBF\xC0" + 0xAE69E67D).s);
+
+		ImGui::SliderInt(/*WireFrame Wall*/XorStr<0x24, 15, 0xE34A7739>("\x73\x4C\x54\x42\x6E\x5B\x4B\x46\x49\x0D\x79\x4E\x5C\x5D" + 0xE34A7739).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL], 0, 5);
+		ImGui::SliderInt(/*Wire Models*/XorStr<0x4A, 12, 0xEE40A126>("\x1D\x22\x3E\x28\x6E\x02\x3F\x35\x37\x3F\x27" + 0xEE40A126).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREMODELS], 0, 5);
+		ImGui::SliderInt(/*CrossHair*/XorStr<0x29, 10, 0x48D66C0F>("\x6A\x58\x44\x5F\x5E\x66\x4E\x59\x43" + 0x48D66C0F).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_CROSSHAIR], 0, 5);
+		ImGui::SliderInt(/*No Recoil*/XorStr<0xA6, 10, 0x9544B0A2>("\xE8\xC8\x88\xFB\xCF\xC8\xC3\xC4\xC2" + 0x9544B0A2).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_NORECOIL], 0, 5);
+		ImGui::SliderInt(/*Speed Hack*/XorStr<0xE7, 11, 0xEE275B68>("\xB4\x98\x8C\x8F\x8F\xCC\xA5\x8F\x8C\x9B" + 0xEE275B68).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_SPEEDHACK], -9, 9);
+		ImGui::PopItemWidth();
+
 		ImGui::NewLine();
 	}
 }
