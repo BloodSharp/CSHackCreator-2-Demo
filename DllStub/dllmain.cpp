@@ -506,11 +506,83 @@ BOOL WINAPI HOOK_QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
     return ret;
 }
 
+#define CSHACKCREATOR_V2_SIGNATURE /*<(BLOODSHARP_CSHACKCREATOR_V2)>*/XorStr<0x88, 32, 0xC7F83205>("\xB4\xA1\xC8\xC7\xC3\xC2\xCA\xDC\xD8\xD0\xC0\xC3\xCB\xD6\xC5\xDF\xD9\xDA\xD1\xD8\xCE\xD8\xDF\xCB\xEF\xF3\xFD\xF5\x96\x8C\x98" + 0xC7F83205).s
+
+void GetVal(Json::Value& config, char* setting, int bufferSize)
+{
+    if (config.isNull())
+        return;
+
+    strcpy_s(setting, bufferSize, config.asCString());
+}
+
+bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
+{
+    for (UINT i = 0; i < strlen((char*)string) + 1; i++)
+        if (string[i] != dwAddress[i])
+            return false;
+    return true;
+}
+
+void InitializeDllStub(HMODULE hModule)
+{
+    Json::Value settings;
+    Json::Reader reader;
+    std::string jsonstring;
+    PBYTE pFileBuffer = 0;
+    DWORD dwFileSize = 0;
+    std::ifstream fsFile;
+
+    szConfigFile[0] = 0;
+    GetModuleFileName(hModule, szConfigFile, MAX_PATH - 1);
+    if (szConfigFile[0])
+    {
+        fsFile.open(szConfigFile, std::ifstream::in | std::ifstream::binary);
+        if (fsFile.is_open())
+        {
+            fsFile.seekg(0, fsFile.end);
+            dwFileSize = (DWORD)fsFile.tellg();
+
+            if (dwFileSize)
+            {
+                fsFile.seekg(0, fsFile.beg);
+                pFileBuffer = new BYTE[dwFileSize];
+                if (pFileBuffer)
+                {
+                    fsFile.read((char*)pFileBuffer, dwFileSize);
+                    for (PBYTE i = pFileBuffer; i < (PBYTE)(((DWORD)pFileBuffer) + dwFileSize); i++)
+                    {
+                        if (IsThisAddressContainString(i, (PBYTE)CSHACKCREATOR_V2_SIGNATURE))
+                        {
+                            i += strlen(CSHACKCREATOR_V2_SIGNATURE) + 1;
+                            jsonstring = ((const char*)i);
+                            if (reader.parse(jsonstring, settings))
+                            {
+                            }
+                            break;
+                        }
+                    }
+                    delete[]pFileBuffer;
+                }
+            }
+        }
+    }
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule,DWORD ul_reason_for_call,LPVOID lpReserved)
 {
     HMODULE hOpenGL32 = 0;
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
+        DisableThreadLibraryCalls(hModule);
+
+        // Default values
+        RtlZeroMemory(&cfg, sizeof(cfg));
+        cfg.iZoom = -5;
+
+        InitializeDllStub(hModule);
+
+        // Hooking
         hOpenGL32 = LoadLibrary("opengl32.dll");
         pOrig_glBegin = (decltype(pOrig_glBegin))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glBegin")), (PBYTE)HOOK_glBegin);
         pOrig_glClear= (decltype(pOrig_glClear))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glClear")), (PBYTE)HOOK_glClear);
