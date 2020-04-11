@@ -92,7 +92,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
         //const ImGuiStyle& style = ImGui::GetStyle();
         if (ImGui::Begin(/*CSHackCreator*/XorStr<0xF9, 14, 0x32B4D256>("\xBA\xA9\xB3\x9D\x9E\x95\xBC\x72\x64\x63\x77\x6B\x77" + 0x32B4D256).s, nullptr,
-            ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_MenuBar |
+            /*ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |*/ ImGuiWindowFlags_MenuBar |
             ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
             ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
         ))
