@@ -139,7 +139,7 @@ void CSHackCreator::Interface::Settings()
 		ImGui::NewLine();
 	}
 
-	if (ImGui::CollapsingHeader(/*Loader*/XorStr<0x8D, 7, 0x2E87244C>("\xC1\xE1\xEE\xF4\xF4\xE0" + 0x2E87244C).s))
+	if (ImGui::CollapsingHeader(/*Loader*/XorStr<0x8D, 7, 0x2E87244C>("\xC1\xE1\xEE\xF4\xF4\xE0" + 0x2E87244C).s, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::PushItemWidth(400);
 		ImGui::InputText(/*Title##LOADER*/XorStr<0xC2, 14, 0xDD99C4C7>("\x96\xAA\xB0\xA9\xA3\xE4\xEB\x85\x85\x8A\x88\x88\x9C" + 0xDD99C4C7).s, CSHackCreator::Settings::Loader::szTitle, MAX_PATH - 1);
@@ -151,7 +151,7 @@ void CSHackCreator::Interface::Settings()
 		ImGui::NewLine();
 	}
 
-	if (ImGui::CollapsingHeader(/*DLL default settings*/XorStr<0xF6, 21, 0xEA8CA877>("\xB2\xBB\xB4\xD9\x9E\x9E\x9A\x9C\x8B\x93\x74\x21\x71\x66\x70\x71\x6F\x69\x6F\x7A" + 0xEA8CA877).s))
+	if (ImGui::CollapsingHeader(/*DLL default settings*/XorStr<0xF6, 21, 0xEA8CA877>("\xB2\xBB\xB4\xD9\x9E\x9E\x9A\x9C\x8B\x93\x74\x21\x71\x66\x70\x71\x6F\x69\x6F\x7A" + 0xEA8CA877).s, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::NewLine();
 	}
