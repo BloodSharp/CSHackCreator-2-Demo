@@ -13,10 +13,39 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Archivos de origen\JSON">
+      <UniqueIdentifier>{a5a7747d-a844-40cc-837a-ea5495f8ee67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\JSON">
+      <UniqueIdentifier>{c8ed2b79-ebb0-4a64-a0c5-b8bdad7231ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\ImGui">
+      <UniqueIdentifier>{643555af-ceee-4fcd-9868-fe526d526d98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de origen\ImGui">
+      <UniqueIdentifier>{63b6f013-f7b7-4e7c-9f4a-06e70f82e339}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="ch4_lib_utils_detours.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON\jsoncpp.cpp">
+      <Filter>Archivos de origen\JSON</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ch4_lib_utils.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\json.h">
+      <Filter>Archivos de encabezado\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="JSON\json-forwards.h">
+      <Filter>Archivos de encabezado\JSON</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
