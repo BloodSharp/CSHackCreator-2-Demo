@@ -62,6 +62,9 @@ void (APIENTRY* pOrig_glDisable)(GLenum mode) = 0;
 void (APIENTRY* pOrig_glViewport)(GLint x, GLint y, GLsizei width, GLsizei height) = 0;
 void (APIENTRY* pOrig_glFrustum)(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar) = 0;
 
+BOOL(WINAPI* pOrig_wglSwapBuffers)(HDC hDc) = 0;
+BOOL(WINAPI* pOrig_SwapBuffers)(HDC hDc) = 0;
+
 WNDPROC pHLWndProc=NULL;
 HWND hdHalfLife;
 
@@ -71,6 +74,9 @@ GLint iView[4]; GLdouble dModel[16], dProy[16]; unsigned int coil = 0;
 GLboolean bOnSpeed = 0, bKeyAimbot = 0, bShoot = 0, bHasTarget = 0, bSmoke = 0, bSky = 0, bFlash = 0,
 bTex = 0, bDrawn = 0, modelviewport = 0, bLeftButtonDown = 0;
 cvar cfg;
+
+bool bInterfaceOpen = true;
+bool bInitializeHack = false;
 
 void LoadConfig()
 {
@@ -589,6 +595,75 @@ void InitializeDllStub(HMODULE hModule)
     }
 }
 
+LRESULT CALLBACK HOOK_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    if (bInitializeHack)
+    {
+        if (uMsg == WM_KEYDOWN && wParam == VK_INSERT)
+        {
+            bInterfaceOpen = !bInterfaceOpen;
+            if (!bInterfaceOpen)
+            {
+                SaveConfig();
+            }
+        }
+        if (bInterfaceOpen)
+            if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+            {
+                if ((uMsg == WM_KEYUP || uMsg == WM_SYSKEYUP) && (wParam < 256))
+                    return CallWindowProc(pHLWndProc, hWnd, uMsg, wParam, lParam);
+                return TRUE;
+            }
+    }
+    return CallWindowProc(pHLWndProc, hWnd, uMsg, wParam, lParam);
+}
+
+HGLRC hRealContext, hNewContext;
+void WINAPI GenericSwapBuffers(HDC hDC)
+{
+    if (!bInitializeHack)
+    {
+        hdHalfLife = WindowFromDC(hDC);
+        if (hdHalfLife)
+        {
+            pHLWndProc = (WNDPROC)SetWindowLong(hdHalfLife, GWL_WNDPROC, (LONG)HOOK_WndProc);
+            ImGui::CreateContext();
+            //InitializeInterface();
+            ImGui_ImplWin32_Init(hdHalfLife);
+            ImGui_ImplOpenGL2_Init();
+            hRealContext = wglGetCurrentContext();
+            hNewContext = wglCreateContext(hDC);
+            bInitializeHack = true;
+        }
+    }
+    wglMakeCurrent(hDC, hNewContext);
+    ImGui_ImplOpenGL2_NewFrame();
+    ImGui_ImplWin32_NewFrame();
+    ImGui::NewFrame();
+    ImGui::GetIO().DeltaTime = 0;
+
+    ImGui::GetIO().MouseDrawCursor = bInterfaceOpen;
+
+    DllStub::Interface::Background();
+    if(bInterfaceOpen)
+        DllStub::Interface::Interface();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+    wglMakeCurrent(hDC, hRealContext);
+}
+
+BOOL WINAPI HOOK_wglSwapBuffers(HDC hDc)
+{
+    GenericSwapBuffers(hDc);
+    return pOrig_wglSwapBuffers(hDc);
+}
+
+BOOL WINAPI HOOK_SwapBuffers(HDC hDc)
+{
+    GenericSwapBuffers(hDc);
+    return pOrig_SwapBuffers(hDc);
+}
 
 DWORD WINAPI InitializeHooks(LPVOID lpThreadParameter)
 {
