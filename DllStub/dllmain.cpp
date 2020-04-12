@@ -179,14 +179,14 @@ void APIENTRY HOOK_glBegin(GLenum mode)
         }
         if (mode == GL_POLYGON)
         {
-            if (cfg.bNightmode)
+            if (cfg.iExtraWalls == 3)
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
-            if (cfg.bWhiteWalls)
+            else if (cfg.iExtraWalls == 2)
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-            if (cfg.bFullbright && bTex)
+            else if (cfg.iExtraWalls == 1 && bTex)
                 pOrig_glDisable(GL_TEXTURE_2D);
         }
-        else if (cfg.bNiggermodels)
+        else if (cfg.iExtraModels == 2)
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
 
         if (mode == GL_QUADS)
@@ -213,14 +213,14 @@ void APIENTRY HOOK_glBegin(GLenum mode)
             else
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
-        if (cfg.bWiremodels)
+        if (cfg.iWiremodels)
         {
             if (mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN)
             {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
                 glLineWidth(1.0f);
             }
-            else if (!cfg.bWireframe)
+            else if (cfg.iWallHack != 3)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
     }
@@ -343,9 +343,9 @@ void APIENTRY HOOK_glVertex3f(GLfloat x, GLfloat y, GLfloat z)
             }
         }
         player.vertex++;
-        if (cfg.bLambert)
+        if (cfg.iExtraModels == 1)
             glColor3f(1.0f, 1.0f, 1.0f);
-        if (cfg.bColorLambert && player.team)
+        if (cfg.iExtraModels == 3 && player.team)
             glColor3f(player.fr, player.fg, player.fb);
     }
     pOrig_glVertex3f(x, y, z);
