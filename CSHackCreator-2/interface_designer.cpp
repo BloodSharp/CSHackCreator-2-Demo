@@ -7,7 +7,7 @@ enum NodeKindTypes
     NodeKindItems = 1, // ID can not be 0
     NodeKindSameLine,
     NodeKindHover,
-    NodeKindClick,
+    //NodeKindClick,
     NodeKindTabItem,
 };
 
@@ -17,13 +17,13 @@ const char* szTabItem = "TabItem";
 const char* szWindow = "Window";
 const char* szGroupBox = "Group";
 const char* szText = "Text";
-const char* szButton = "Button";
+//const char* szButton = "Button";
 const char* szComboBox = "ComboBox";
 const char* szCheckBox = "CheckBox";
 const char* szToolTip = "ToolTip";
 const char* szNewLine = "New Line";
-const char* szVariableEquals = "Variable Equals";
-const char* szVariableSetValue = "Variable Set Value";
+//const char* szVariableEquals = "Variable Equals";
+//const char* szVariableSetValue = "Variable Set Value";
 
 // Nodes inputs/outputs strings
 const char* szTabItems = "Tab Item";
@@ -58,6 +58,7 @@ std::map<std::string, MyNode * (*)()> available_nodes
             });
         }
     },
+    /*
     {
         szVariableEquals, []() -> MyNode*
         {
@@ -79,6 +80,7 @@ std::map<std::string, MyNode * (*)()> available_nodes
             });
         }
     },
+    */
     {
         szWindow, []() -> MyNode*
         {
@@ -103,7 +105,7 @@ std::map<std::string, MyNode * (*)()> available_nodes
                 {szItems,NodeKindItems},
                 {szSameLine,NodeKindSameLine},
                 {szOnMouseHover,NodeKindHover},
-                {szOnMouseClick,NodeKindClick}
+                //{szOnMouseClick,NodeKindClick}
             });
         }
     },
@@ -121,6 +123,7 @@ std::map<std::string, MyNode * (*)()> available_nodes
             });
         }
     },
+    /*
     {
         szButton, []() -> MyNode*
         {
@@ -136,6 +139,7 @@ std::map<std::string, MyNode * (*)()> available_nodes
             });
         }
     },
+    */
     {
         szComboBox, []() -> MyNode*
         {
@@ -217,6 +221,7 @@ void ProcessTabBarItemContent(MyNode* node, float zoom)
     }
 }
 
+/*
 void ProcessVariableEqualsContent(MyNode* node, float zoom)
 {
     if(node->title == szVariableEquals)
@@ -240,6 +245,7 @@ void ProcessVariableSetValueContent(MyNode* node, float zoom)
         ImGui::PopItemWidth();
     }
 }
+*/
 
 void ProcessGroupContent(MyNode* node)
 {
@@ -260,6 +266,7 @@ void ProcessTextContent(MyNode* node, float zoom)
     }
 }
 
+/*
 void ProcessButtonContent(MyNode* node, float zoom)
 {
     if (node->title == szButton)
@@ -271,6 +278,7 @@ void ProcessButtonContent(MyNode* node, float zoom)
         ImGui::PopItemWidth();
     }
 }
+*/
 
 void ProcessComboBoxContent(MyNode* node, float zoom)
 {
@@ -328,11 +336,11 @@ void CSHackCreator::Interface::Designer()
             ProcessWindowContent(node, canvas.zoom);
             ProcessTabBarContent(node, canvas.zoom);
             ProcessTabBarItemContent(node, canvas.zoom);
-            ProcessVariableEqualsContent(node, canvas.zoom);
-            ProcessVariableSetValueContent(node, canvas.zoom);
+            //ProcessVariableEqualsContent(node, canvas.zoom);
+            //ProcessVariableSetValueContent(node, canvas.zoom);
             ProcessGroupContent(node);
             ProcessTextContent(node, canvas.zoom);
-            ProcessButtonContent(node, canvas.zoom);
+            //ProcessButtonContent(node, canvas.zoom);
             ProcessComboBoxContent(node, canvas.zoom);
             ProcessCheckBoxContent(node, canvas.zoom);
             ProcessToolTipContent(node, canvas.zoom);
@@ -426,8 +434,8 @@ const char* GetNodeTitle(int uiNodeType)
 {
     switch (uiNodeType)
     {
-        case NodeTypeButton:
-            return szButton;
+        //case NodeTypeButton:
+        //    return szButton;
         case NodeTypeCheckBox:
             return szCheckBox;
         case NodeTypeComboBox:
@@ -444,10 +452,12 @@ const char* GetNodeTitle(int uiNodeType)
             return szText;
         case NodeTypeToolTip:
             return szToolTip;
+        /*
         case NodeTypeVariableEquals:
             return szVariableEquals;
         case NodeTypeVariableSetValue:
             return szVariableSetValue;
+        */
         case NodeTypeWindow:
             return szWindow;
         default:
