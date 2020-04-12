@@ -155,10 +155,29 @@
   <ItemGroup>
     <ClCompile Include="ch4_lib_utils_detours.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="interface_interpreter.cpp" />
+    <ClCompile Include="jsonGetVals.cpp" />
     <ClCompile Include="JSON\jsoncpp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ch4_lib_utils.h" />
+    <ClInclude Include="DllStub.h" />
+    <ClInclude Include="ImGui\imconfig.h" />
+    <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\imgui_impl_opengl2.h" />
+    <ClInclude Include="ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="ImGui\imgui_internal.h" />
+    <ClInclude Include="ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ImGui\imstb_textedit.h" />
+    <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="interface_interpreter.h" />
+    <ClInclude Include="jsonGetVals.h" />
     <ClInclude Include="JSON\json-forwards.h" />
     <ClInclude Include="JSON\json.h" />
   </ItemGroup>

@@ -36,6 +36,30 @@
     <ClCompile Include="JSON\jsoncpp.cpp">
       <Filter>Archivos de origen\JSON</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_opengl2.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="interface_interpreter.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonGetVals.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ch4_lib_utils.h">
@@ -46,6 +70,39 @@
     </ClInclude>
     <ClInclude Include="JSON\json-forwards.h">
       <Filter>Archivos de encabezado\JSON</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_opengl2.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="interface_interpreter.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="jsonGetVals.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="DllStub.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
