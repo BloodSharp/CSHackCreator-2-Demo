@@ -117,11 +117,11 @@ void DrawBox(GLfloat x, GLfloat y, GLfloat dist)
     glLineWidth(4.0f);
     glColor4f(player.fr, player.fg, player.fb, 0.6f);
     pOrig_glBegin(GL_CURRENT_BIT | GL_POINT_BIT);
-    pOrig_glVertex2f(x - dist * 2.5, y + dist * 3);
-    pOrig_glVertex2f(x - dist * 2.5, y + dist * 10);
-    pOrig_glVertex2f(x + dist * 2.5, y + dist * 10);
-    pOrig_glVertex2f(x + dist * 2.5, y + dist * 3);
-    pOrig_glVertex2f(x - dist * 2.5, y + dist * 3);
+    pOrig_glVertex2f(x - dist * 2.5f, y + dist * 3.0f);
+    pOrig_glVertex2f(x - dist * 2.5f, y + dist * 10.0f);
+    pOrig_glVertex2f(x + dist * 2.5f, y + dist * 10.0f);
+    pOrig_glVertex2f(x + dist * 2.5f, y + dist * 3.0f);
+    pOrig_glVertex2f(x - dist * 2.5f, y + dist * 3.0f);
     glEnd();
 
     pOrig_glDisable(GL_BLEND);
@@ -367,11 +367,11 @@ void APIENTRY HOOK_glShadeModel(GLenum mode)
                     glGetIntegerv(GL_VIEWPORT, iView);
                     gluProject(model.highest_x, model.highest_y, model.highest_z, dModel, dProy, iView, &wx, &wy, &wz);
                     if (cfg.bEspBox)
-                        DrawBox((wx / (iView[2] / 2)) - 1.0f, (wy / (iView[3] / 2)) - 1.0f, wz - 1.0f);
-                    if (cfg.bAimTeam)
+                        DrawBox((GLfloat(wx) / (iView[2] / 2)) - 1.0f, (GLfloat(wy) / (iView[3] / 2)) - 1.0f, GLfloat(wz) - 1.0f);
+                    if (cfg.iAimTeam)
                     {
                         bHasTarget = ((abs((int)(iView[2] / 2 - wx)) < (iView[2] / 10)) && (abs((int)(iView[3] / 2 - wy)) < (iView[3] / 10)));
-                        if (bKeyAimbot && bHasTarget && (cfg.bAimTeam == 3 || cfg.bAimTeam == player.team))
+                        if (bKeyAimbot && bHasTarget && (cfg.iAimTeam == 3 || cfg.iAimTeam == player.team))
                         {
                             pt.x = (long)wx; pt.y = (long)(iView[3] - (wy - .01 / (wz - 1)));//(long)(iView[3]-wy);
                             if(ClientToScreen(hdHalfLife,&pt))
