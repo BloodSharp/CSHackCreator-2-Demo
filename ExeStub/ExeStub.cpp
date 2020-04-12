@@ -9,9 +9,16 @@ char szTitle[MAX_PATH];
 char szInjectButton[MAX_PATH];
 char szWaitForGame[MAX_PATH];
 char szInjectionError[MAX_PATH];
+char szDllNotFound[MAX_PATH];
 
+char szDllLibrary[MAX_PATH];
+char szModulePath[MAX_PATH];
+
+HWND hwnd;
 int WINDOW_WIDTH = 400;
 int WINDOW_HEIGHT = 240;
+
+HANDLE hInjection = 0;
 
 #define CSHACKCREATOR_V2_SIGNATURE /*<(BLOODSHARP_CSHACKCREATOR_V2)>*/XorStr<0xB4,32,0x84103E60>("\x88\x9D\xF4\xFB\xF7\xF6\xFE\xE8\xF4\xFC\xEC\xEF\x9F\x82\x91\x8B\x85\x86\x8D\x84\x9A\x8C\x8B\x9F\x83\x9F\x91\x99\xE2\xF8\xEC"+0x84103E60).s
 
@@ -35,6 +42,49 @@ ATOM RegMyWindowClass(HINSTANCE hInst, LPCTSTR lpzClassName)
     return RegisterClass(&wcWindowClass);
 }
 
+bool WINAPI InyectarDLL()
+{
+    DWORD pid;
+    HANDLE proc, hToken = NULL;;
+    LPVOID RemoteString, nLoadLibrary;
+    HWND VentanaHL;
+    TOKEN_PRIVILEGES tkp;
+
+    if (OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
+    {
+        LookupPrivilegeValue(NULL, SE_DEBUG_NAME, &tkp.Privileges[0].Luid);
+        tkp.PrivilegeCount = 1; tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+        AdjustTokenPrivileges(hToken, 0, &tkp, sizeof(tkp), NULL, NULL);
+    }
+
+    while ((VentanaHL = FindWindowA(/*Valve001*/XorStr<0x06, 9, 0x105F9F6A>("\x50\x66\x64\x7F\x6F\x3B\x3C\x3C" + 0x105F9F6A).s, 0)) == NULL && (VentanaHL = FindWindowA(0,/*Half-Life*/XorStr<0x19, 10, 0x6B9F95B8>("\x51\x7B\x77\x7A\x30\x52\x76\x46\x44" + 0x6B9F95B8).s)) == NULL)
+        Sleep(100);
+
+    GetWindowThreadProcessId(VentanaHL, &pid);
+
+    if ((proc = OpenProcess(0xF0000 | 0x100000L | 0xFFF, 0, pid)) == NULL)
+        return false;
+
+    if ((nLoadLibrary = (LPVOID)GetProcAddress(GetModuleHandle(/*Kernel32.dll*/XorStr<0xD2, 13, 0x47902CEA>("\x99\xB6\xA6\xBB\xB3\xBB\xEB\xEB\xF4\xBF\xB0\xB1" + 0x47902CEA).s),/*LoadLibraryA*/XorStr<0x88, 13, 0xFA9E3BD2>("\xC4\xE6\xEB\xEF\xC0\xE4\xEC\xFD\xF1\xE3\xEB\xD2" + 0xFA9E3BD2).s)) == NULL)
+        return false;
+    if ((RemoteString = (LPVOID)VirtualAllocEx(proc, NULL, strlen(szModulePath), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE)) == NULL)
+        return false;
+    if (!WriteProcessMemory(proc, (LPVOID)RemoteString, szModulePath, strlen(szModulePath), NULL))
+        return false;
+    if (!CreateRemoteThread(proc, NULL, 0, (LPTHREAD_START_ROUTINE)nLoadLibrary, (LPVOID)RemoteString, 0, NULL))
+        return false;
+    CloseHandle(proc);
+    return true;
+}
+
+void PrepararInyeccionNormal()
+{
+    if (!InyectarDLL())
+        MessageBox(hwnd,szInjectionError,szTitle, MB_ICONERROR | MB_TOPMOST);
+    hInjection = 0;
+    ExitThread(0);
+}
+
 void RenderLoader(bool* pbOpen)
 {
     //CH4::Interface::PushWindowsStyles();
@@ -47,7 +97,13 @@ void RenderLoader(bool* pbOpen)
         ImGuiWindowFlags_NoBringToFrontOnFocus))
     {
         CH4::Interface::Particles::Render(35);
-        ImGui::Button((const char*)szInjectButton, ImVec2(ImGui::GetIO().DisplaySize.x - 17, 20));
+        if (ImGui::Button((const char*)szInjectButton, ImVec2(ImGui::GetIO().DisplaySize.x - 17, 20)))
+        {
+            if (!hInjection)
+                hInjection = CreateThread(NULL, (DWORD)NULL, (LPTHREAD_START_ROUTINE)PrepararInyeccionNormal, NULL, (DWORD)NULL, NULL);
+            else if (hInjection)
+                MessageBox(hwnd, szWaitForGame, szTitle, MB_ICONINFORMATION | MB_TOPMOST);
+        }
         ImGui::End();
     }
     ImGui::PopStyleVar();
@@ -97,6 +153,8 @@ void InitializeProgram(HINSTANCE hInstance)
     strcpy_s(szInjectButton, MAX_PATH - 1, /*Inject MyHack*/XorStr<0x2A, 14, 0xF42F84B4>("\x63\x45\x46\x48\x4D\x5B\x10\x7C\x4B\x7B\x55\x56\x5D" + 0xF42F84B4).s);
     strcpy_s(szWaitForGame, MAX_PATH - 1, /*Waiting for the game to inject...*/XorStr<0x23, 34, 0x93144A54>("\x74\x45\x4C\x52\x4E\x46\x4E\x0A\x4D\x43\x5F\x0E\x5B\x58\x54\x12\x54\x55\x58\x53\x17\x4C\x56\x1A\x52\x52\x57\x5B\x5C\x34\x6F\x6C\x6D" + 0x93144A54).s);
     strcpy_s(szInjectionError, MAX_PATH - 1, /*Injection error!*/XorStr<0xD0, 17, 0x17BAFF77>("\x99\xBF\xB8\xB6\xB7\xA1\xBF\xB8\xB6\xF9\xBF\xA9\xAE\xB2\xAC\xFE" + 0x17BAFF77).s);
+    strcpy_s(szDllNotFound, MAX_PATH - 1,/*MyHack.dll not found!*/XorStr<0x69, 22, 0x746A33B7>("\x24\x13\x23\x0D\x0E\x05\x41\x14\x1D\x1E\x53\x1A\x1A\x02\x57\x1E\x16\x0F\x15\x18\x5C" + 0x746A33B7).s);
+    strcpy_s(szDllLibrary, MAX_PATH - 1,/*MyHack.dll*/XorStr<0x49, 11, 0xC0B77395>("\x04\x33\x03\x2D\x2E\x25\x61\x34\x3D\x3E" + 0xC0B77395).s);
 
     GetModuleFileName(hInstance, szProgramFile, MAX_PATH - 1);
     fsFile.open(szProgramFile, std::ifstream::in | std::ifstream::binary);
@@ -124,6 +182,9 @@ void InitializeProgram(HINSTANCE hInstance)
                             GetVal(settings["Loader"]["Inject"], szInjectButton, MAX_PATH - 1);
                             GetVal(settings["Loader"]["WaitingForTheGame"], szWaitForGame, MAX_PATH - 1);
                             GetVal(settings["Loader"]["InjectionError"], szInjectionError, MAX_PATH - 1);
+                            GetVal(settings["Loader"]["DllNotFound"], szDllNotFound, MAX_PATH - 1);
+
+                            GetVal(settings["Files"]["Library"], szDllLibrary, MAX_PATH - 1);
                         }
                         break;
                     }
@@ -134,13 +195,30 @@ void InitializeProgram(HINSTANCE hInstance)
     }
 }
 
+BOOL FileExist(LPCSTR filename)
+{
+    WIN32_FIND_DATAA finddata;
+    return (FindFirstFileA(filename, &finddata) != INVALID_HANDLE_VALUE);
+}
+
 // Main code
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     InitializeProgram(hInstance);
+
+    GetCurrentDirectory(MAX_PATH - 1, szModulePath);
+    strcat_s(szModulePath, MAX_PATH - 1,/*\\*/XorStr<0x9B, 2, 0xE398A510>("\xC7" + 0xE398A510).s);
+    strcat_s(szModulePath, MAX_PATH - 1, szDllLibrary);
+
+    if (!FileExist(szModulePath))
+    {
+        MessageBox(0, szDllNotFound, szTitle, MB_ICONERROR | MB_TOPMOST);
+        return 0;
+    }
+
     if (!RegMyWindowClass(hInstance, (LPCTSTR)szTitle))
         return 0;
-    HWND hwnd = ::CreateWindowEx(0, (LPCSTR)szTitle, (LPCSTR)szTitle, WS_POPUP,//WS_OVERLAPPEDWINDOW,
+    hwnd = ::CreateWindowEx(0, (LPCSTR)szTitle, (LPCSTR)szTitle, WS_POPUP,//WS_OVERLAPPEDWINDOW,
         GetSystemMetrics(SM_CXSCREEN) / 2 - WINDOW_WIDTH / 2,
         GetSystemMetrics(SM_CYSCREEN) / 2 - WINDOW_HEIGHT / 2,
         WINDOW_WIDTH, WINDOW_HEIGHT, NULL, NULL, hInstance, NULL);
