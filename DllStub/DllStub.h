@@ -8,6 +8,7 @@
 #include <fstream>
 #include <corecrt_math_defines.h>
 #include <cmath>
+#include <algorithm>
 
 #include "ch4_lib_utils.h"
 
