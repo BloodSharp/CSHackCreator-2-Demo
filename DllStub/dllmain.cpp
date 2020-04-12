@@ -153,7 +153,7 @@ void APIENTRY HOOK_glBegin(GLenum mode)
                     pOrig_glEnable(GL_DEPTH_TEST);
                 break;
             case 2:
-                if (!(mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN || mode == GL_QUADS))
+                if (mode == GL_POLYGON)
                 {
                     glGetFloatv(GL_CURRENT_COLOR, col);
                     pOrig_glDisable(GL_DEPTH_TEST);
@@ -170,7 +170,7 @@ void APIENTRY HOOK_glBegin(GLenum mode)
             default:
                 break;
         }
-        if (!(mode == GL_TRIANGLES || mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN || mode == GL_QUADS))
+        if (mode == GL_POLYGON)
         {
             if (cfg.bNightmode)
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
