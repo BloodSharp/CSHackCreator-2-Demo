@@ -46,7 +46,8 @@ enum NodeType
     NodeTypeComboBox,
     NodeTypeCheckBox,
     NodeTypeToolTip,
-    NodeTypeNewLine
+    NodeTypeNewLine,
+    NodeTypeSlider
 };
 
 /// A structure holding node state.

@@ -24,6 +24,7 @@ const char* szToolTip = "ToolTip";
 const char* szNewLine = "New Line";
 //const char* szVariableEquals = "Variable Equals";
 //const char* szVariableSetValue = "Variable Set Value";
+const char* szSlider = "Slider";
 
 // Nodes inputs/outputs strings
 const char* szTabItems = "Tab Item";
@@ -185,6 +186,20 @@ std::map<std::string, MyNode * (*)()> available_nodes
                 {szItems,NodeKindItems}
             });
         }
+    },
+    {
+        szSlider, []() -> MyNode*
+        {
+            return new MyNode(szSlider,
+            {
+                {szItems,NodeKindItems},
+                {szSameLine,NodeKindSameLine}
+            },
+            {
+                {szSameLine,NodeKindSameLine},
+                {szOnMouseHover,NodeKindHover}
+            });
+        }
     }
 };
 
@@ -319,6 +334,17 @@ void ProcessNewLineContent(MyNode* node)
         node->uiNodeType = NodeTypeNewLine;
 }
 
+void ProcessSliderContent(MyNode* node, float zoom)
+{
+    if (node->title == szSlider)
+    {
+        node->uiNodeType = NodeTypeSlider;
+        ImGui::PushItemWidth(200 * zoom);
+        // TODO Slider features
+        ImGui::PopItemWidth();
+    }
+}
+
 void CSHackCreator::Interface::Designer()
 {
     static ImNodes::CanvasState canvas{};
@@ -345,6 +371,7 @@ void CSHackCreator::Interface::Designer()
             ProcessCheckBoxContent(node, canvas.zoom);
             ProcessToolTipContent(node, canvas.zoom);
             ProcessNewLineContent(node);
+            ProcessSliderContent(node, canvas.zoom);
 
             ImNodes::Ez::OutputSlots(node->output_slots.data(), node->output_slots.size());
 
