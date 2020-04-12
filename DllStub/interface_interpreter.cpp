@@ -55,6 +55,10 @@ std::vector<Node*> Nodes;
 
 void DllStub::Interface::LoadInterpreter(Json::Value&settings)
 {
+void DllStub::Interface::Initialize()
+{
+	ImGui::GetStyle().WindowTitleAlign = ImVec2(0.5f, 0.5f);
+}
 }
 
 void DllStub::Interface::Interface()
