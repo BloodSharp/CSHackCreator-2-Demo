@@ -546,6 +546,38 @@ void InitializeDllStub(HMODULE hModule)
                             jsonstring = ((const char*)i);
                             if (reader.parse(jsonstring, settings))
                             {
+                                char* pos = szModulePath + strlen(szModulePath);
+                                while (pos >= szModulePath && *pos != '\\')
+                                    --pos;
+                                pos[1] = 0;
+
+                                GetVal(settings["Files"]["Configurations"], szConfigFile, MAX_PATH - 1);
+                                strcat_s(szModulePath, MAX_PATH - 1, szConfigFile);
+                                strcpy_s(szConfigFile, MAX_PATH - 1, szModulePath);
+                                RtlZeroMemory(szModulePath, MAX_PATH);
+
+                                GetVal(settings["Library"]["MasterSwitch"], &cfg.bActivated);
+                                GetVal(settings["Library"]["NoSmoke"], &cfg.bNoSmoke);
+                                GetVal(settings["Library"]["NoFlash"], &cfg.bNoFlash);
+                                GetVal(settings["Library"]["NoSky"], &cfg.bNoSky);
+                                GetVal(settings["Library"]["EspBox"], &cfg.bEspBox);
+                                GetVal(settings["Library"]["BunnyHop"], &cfg.bBunnyHop);
+                                GetVal(settings["Library"]["Zoom"], &cfg.bZoom);
+
+                                GetVal(settings["Library"]["WallHack"], &cfg.iWallHack);
+                                GetVal(settings["Library"]["ExtraWalls"], &cfg.iExtraWalls);
+                                GetVal(settings["Library"]["ExtraModels"], &cfg.iExtraModels);
+                                GetVal(settings["Library"]["AimTeam"], &cfg.iAimTeam);
+
+                                GetVal(settings["Library"]["WireFrameWall"], &cfg.iWireframeWall);
+                                GetVal(settings["Library"]["WireModels"], &cfg.iWiremodels);
+                                GetVal(settings["Library"]["CrossHair"], &cfg.iCrosshair);
+                                GetVal(settings["Library"]["Recoil"], &cfg.iNoRecoil);
+                                GetVal(settings["Library"]["Speed"], &cfg.iSpeed);
+
+                                LoadConfig();
+
+                                DllStub::Interface::LoadInterpreter(settings);
                             }
                             break;
                         }
