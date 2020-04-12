@@ -55,6 +55,97 @@ std::vector<Node*> Nodes;
 
 void DllStub::Interface::LoadInterpreter(Json::Value&settings)
 {
+	unsigned int uiNodesCount = -1;
+
+	GetVal(settings["Nodes"]["Count"], &uiNodesCount);
+	if (uiNodesCount > 0)
+	{
+		for (unsigned int i = 0; i < uiNodesCount; i++)
+		{
+			Node* tmpNode = new Node();
+			int iNodeType = -1;
+
+			// Buscar el nodo por titulo y asignar constructor mapeado...
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Type"], &iNodeType);
+			if (iNodeType == -1)
+			{
+				delete tmpNode;
+				continue;
+			}
+
+			tmpNode->iNodeType = iNodeType;
+			tmpNode->szText[0] = 0;
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"], &tmpNode->fYPosition);
+			//
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Text"], tmpNode->szText, MAX_PATH - 1);
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["dbVariable"], &tmpNode->dbVariable);
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_1"], &tmpNode->iVariable_1);
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["X"], &tmpNode->vSize.x);
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["Y"], &tmpNode->vSize.y);
+
+			Nodes.push_back(tmpNode);
+		}
+
+		// Cargar conexiones
+		for (unsigned int i = 0; i < Nodes.size(); i++)
+		{
+			int iConnectionsOutputs = -1;
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["OutputsCount"], &iConnectionsOutputs);
+			if (iConnectionsOutputs == -1)
+				continue;
+
+			// Procesamos conexiones del output del vector
+			for (int j = 0; j < iConnectionsOutputs; j++)
+			{
+				int iTargetNode = -1;
+				int iTargetSlot = -1;
+				int iSourceSlot = -1;
+
+				Connections tmpConnection;
+
+				GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["SourceSlot"], &iSourceSlot);
+				GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["TargetNode"], &iTargetNode);
+				GetVal(settings["Nodes"][std::to_string(i).c_str()]["Connections"]["Outputs"][std::to_string(j)]["TargetSlot"], &iTargetSlot);
+
+				if (iSourceSlot == -1)
+				{
+					#ifdef _DEBUG
+						std::ostringstream strCorrupted;
+						strCorrupted << "Corrupted file (Corrupted node " << i << " - " << j << " - No SourceSlot)";
+						MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+					#endif // _DEBUG
+					continue;
+				}
+				if (iTargetNode == -1)
+				{
+					#ifdef _DEBUG
+						std::ostringstream strCorrupted;
+						strCorrupted << "Corrupted file (Corrupted node " << i << " - " << j << " - No TargetNode)";
+						MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+					#endif // _DEBUG
+					continue;
+				}
+				if (iTargetSlot == -1)
+				{
+					#ifdef _DEBUG
+						std::ostringstream strCorrupted;
+						strCorrupted << "Corrupted file (Corrupted node " << i << " - " << j << " - No TargetSlot)";
+						MessageBox(GetActiveWindow(), strCorrupted.str().c_str(), "CSHackCreator v2 - BloodSharp", MB_ICONERROR);
+					#endif // _DEBUG
+					continue;
+				}
+
+				tmpConnection.uiSourceSlot = (unsigned int)iSourceSlot;
+				tmpConnection.uiTargetNode = (unsigned int)iTargetNode;
+				tmpConnection.uiTargetSlot = (unsigned int)iTargetSlot;
+				tmpConnection.fTargetPositionY = Nodes[iTargetNode]->fYPosition;
+
+				Nodes[i]->connections.push_back(tmpConnection);
+			}
+		}
+	}
+}
+
 void DllStub::Interface::Initialize()
 {
 	ImGui::GetStyle().WindowTitleAlign = ImVec2(0.5f, 0.5f);
