@@ -4,6 +4,7 @@ char CSHackCreator::Settings::Loader::szTitle[MAX_PATH];
 char CSHackCreator::Settings::Loader::szInject[MAX_PATH];
 char CSHackCreator::Settings::Loader::szWaitingForInjection[MAX_PATH];
 char CSHackCreator::Settings::Loader::szInjectionError[MAX_PATH];
+char CSHackCreator::Settings::Loader::szDllNotFound[MAX_PATH];
 
 bool CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_ALL];
 int  CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_ALL];
@@ -73,6 +74,7 @@ void CSHackCreator::Settings::New()
 	strcpy_s(CSHackCreator::Settings::Loader::szInject, MAX_PATH - 1, /*Inject MyHack*/XorStr<0x13, 14, 0x82A9F5E6>("\x5A\x7A\x7F\x73\x74\x6C\x39\x57\x62\x54\x7C\x7D\x74" + 0x82A9F5E6).s);
 	strcpy_s(CSHackCreator::Settings::Loader::szWaitingForInjection, MAX_PATH - 1, /*Waiting for the game to inject...*/XorStr<0xCC, 34, 0x1505011D>("\x9B\xAC\xA7\xBB\xB9\xBF\xB5\xF3\xB2\xBA\xA4\xF7\xAC\xB1\xBF\xFB\xBB\xBC\xB3\xBA\xC0\x95\x8D\xC3\x8D\x8B\x8C\x82\x8B\x9D\xC4\xC5\xC2" + 0x1505011D).s);
 	strcpy_s(CSHackCreator::Settings::Loader::szInjectionError, MAX_PATH - 1, /*Injection error!*/XorStr<0xD2, 17, 0x459D0313>("\x9B\xBD\xBE\xB0\xB5\xA3\xB1\xB6\xB4\xFB\xB9\xAF\xAC\xB0\x92\xC0" + 0x459D0313).s);
+	strcpy_s(CSHackCreator::Settings::Loader::szDllNotFound, MAX_PATH - 1,/*MyHack.dll not found!*/XorStr<0x7E, 22, 0xAD2C194E>("\x33\x06\xC8\xE0\xE1\xE8\xAA\xE1\xEA\xEB\xA8\xE7\xE5\xFF\xAC\xEB\xE1\xFA\xFE\xF5\xB3" + 0xAD2C194E).s);
 
 	// Library
 	CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] = false;
@@ -107,6 +109,7 @@ void CSHackCreator::Settings::Open(Json::Value&settings)
 	GetVal(settings["Loader"]["Inject"], CSHackCreator::Settings::Loader::szInject, MAX_PATH - 1);
 	GetVal(settings["Loader"]["WaitingForTheGame"], CSHackCreator::Settings::Loader::szWaitingForInjection, MAX_PATH - 1);
 	GetVal(settings["Loader"]["InjectionError"], CSHackCreator::Settings::Loader::szInjectionError, MAX_PATH - 1);
+	GetVal(settings["Loader"]["DllNotFound"], CSHackCreator::Settings::Loader::szDllNotFound, MAX_PATH - 1);
 
 	// Library
 	GetVal(settings["Library"]["MasterSwitch"], &CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH]);
@@ -141,6 +144,7 @@ void CSHackCreator::Settings::Save(Json::Value&settings)
 	settings["Loader"]["Inject"] = CSHackCreator::Settings::Loader::szInject;
 	settings["Loader"]["WaitingForTheGame"] = CSHackCreator::Settings::Loader::szWaitingForInjection;
 	settings["Loader"]["InjectionError"] = CSHackCreator::Settings::Loader::szInjectionError;
+	settings["Loader"]["DllNotFound"] = CSHackCreator::Settings::Loader::szDllNotFound;
 
 	// Library
 	settings["Library"]["MasterSwitch"] = CSHackCreator::Settings::Library::CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH];
@@ -210,6 +214,7 @@ void CSHackCreator::Interface::Settings()
 		ImGui::InputText(/*Inject button*/XorStr<0xCE, 14, 0xA14D3C44>("\x87\xA1\xBA\xB4\xB1\xA7\xF4\xB7\xA3\xA3\xAC\xB6\xB4" + 0xA14D3C44).s, CSHackCreator::Settings::Loader::szInject, MAX_PATH - 1);
 		ImGui::InputText(/*Waiting for the game to inject*/XorStr<0x7B, 31, 0x674A0E2C>("\x2C\x1D\x14\x0A\x16\xEE\xE6\xA2\xE5\xEB\xF7\xA6\xF3\xE0\xEC\xAA\xEC\xED\xE0\xEB\xAF\xE4\xFE\xB2\xFA\xFA\xFF\xF3\xF4\xEC" + 0x674A0E2C).s, CSHackCreator::Settings::Loader::szWaitingForInjection, MAX_PATH - 1);
 		ImGui::InputText(/*Injection error*/XorStr<0xB4, 16, 0x69229FDA>("\xFD\xDB\xDC\xD2\xDB\xCD\xD3\xD4\xD2\x9D\xDB\xCD\xB2\xAE\xB0" + 0x69229FDA).s, CSHackCreator::Settings::Loader::szInjectionError, MAX_PATH - 1);
+		ImGui::InputText(/*DLL not found*/XorStr<0xB2, 14, 0xBE1C5C54>("\xF6\xFF\xF8\x95\xD8\xD8\xCC\x99\xDC\xD4\xC9\xD3\xDA" + 0xBE1C5C54).s, CSHackCreator::Settings::Loader::szDllNotFound, MAX_PATH - 1);
 		ImGui::PopItemWidth();
 
 		ImGui::NewLine();

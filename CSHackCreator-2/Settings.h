@@ -44,6 +44,7 @@ namespace CSHackCreator
 			extern char szInject[MAX_PATH];
 			extern char szWaitingForInjection[MAX_PATH];
 			extern char szInjectionError[MAX_PATH];
+			extern char szDllNotFound[MAX_PATH];
 		}
 
 		namespace Library
