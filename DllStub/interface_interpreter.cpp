@@ -1,5 +1,58 @@
 #include "DllStub.h"
 
+enum NodeType
+{
+	NodeTypeWindow = 0,
+	NodeTypeTabBar,
+	NodeTypeTabItem,
+	//NodeTypeVariableEquals,
+	//NodeTypeVariableSetValue,
+	NodeTypeGroup,
+	NodeTypeText,
+	//NodeTypeButton,
+	NodeTypeComboBox,
+	NodeTypeCheckBox,
+	NodeTypeToolTip,
+	NodeTypeNewLine,
+	NodeTypeSlider
+};
+
+struct Connections
+{
+	unsigned int uiTargetNode;
+	unsigned int uiTargetSlot;
+	unsigned int uiSourceSlot;
+	float fTargetPositionY;
+
+	bool operator < (const Connections& other) const
+	{
+		return fTargetPositionY < other.fTargetPositionY;
+	}
+};
+
+struct Node
+{
+	std::vector<Connections> connections;
+	int iNodeType;
+	float fYPosition;
+
+	//Variables
+	char szText[MAX_PATH];
+	ImVec2 vSize;
+	double dbVariable;
+	int iVariable_1;
+
+	explicit Node()
+	{
+		connections.clear();
+		fYPosition = 0;
+		iNodeType = -1;
+		vSize = ImVec2(0.0f, 0.0f);
+	}
+};
+
+std::vector<Node*> Nodes;
+
 void DllStub::Interface::LoadInterpreter(Json::Value&settings)
 {
 }
