@@ -512,6 +512,7 @@ bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
 
 void InitializeDllStub(HMODULE hModule)
 {
+    char szModulePath[MAX_PATH];
     Json::Value settings;
     Json::Reader reader;
     std::string jsonstring;
@@ -519,11 +520,11 @@ void InitializeDllStub(HMODULE hModule)
     DWORD dwFileSize = 0;
     std::ifstream fsFile;
 
-    szConfigFile[0] = 0;
-    GetModuleFileName(hModule, szConfigFile, MAX_PATH - 1);
-    if (szConfigFile[0])
+    szModulePath[0] = 0;
+    GetModuleFileName(hModule, szModulePath, MAX_PATH - 1);
+    if (szModulePath[0])
     {
-        fsFile.open(szConfigFile, std::ifstream::in | std::ifstream::binary);
+        fsFile.open(szModulePath, std::ifstream::in | std::ifstream::binary);
         if (fsFile.is_open())
         {
             fsFile.seekg(0, fsFile.end);
