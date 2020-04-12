@@ -502,14 +502,6 @@ BOOL WINAPI HOOK_QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
 
 #define CSHACKCREATOR_V2_SIGNATURE /*<(BLOODSHARP_CSHACKCREATOR_V2)>*/XorStr<0x88, 32, 0xC7F83205>("\xB4\xA1\xC8\xC7\xC3\xC2\xCA\xDC\xD8\xD0\xC0\xC3\xCB\xD6\xC5\xDF\xD9\xDA\xD1\xD8\xCE\xD8\xDF\xCB\xEF\xF3\xFD\xF5\x96\x8C\x98" + 0xC7F83205).s
 
-void GetVal(Json::Value& config, char* setting, int bufferSize)
-{
-    if (config.isNull())
-        return;
-
-    strcpy_s(setting, bufferSize, config.asCString());
-}
-
 bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
 {
     for (UINT i = 0; i < strlen((char*)string) + 1; i++)
