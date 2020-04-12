@@ -62,6 +62,7 @@ void (APIENTRY* pOrig_glDisable)(GLenum mode) = 0;
 void (APIENTRY* pOrig_glViewport)(GLint x, GLint y, GLsizei width, GLsizei height) = 0;
 void (APIENTRY* pOrig_glFrustum)(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar) = 0;
 
+BOOL(WINAPI* pOrig_QueryPerformanceCounter)(LARGE_INTEGER* lpPerformanceCount) = 0;
 BOOL(WINAPI* pOrig_wglSwapBuffers)(HDC hDc) = 0;
 BOOL(WINAPI* pOrig_SwapBuffers)(HDC hDc) = 0;
 
@@ -468,7 +469,6 @@ void APIENTRY HOOK_glFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLd
     pOrig_glFrustum(left, right, bottom, top, zNear, zFar);
 }
 
-BOOL(WINAPI* pOrig_QueryPerformanceCounter)(LARGE_INTEGER* lpPerformanceCount) = 0;
 BOOL WINAPI HOOK_QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
 {
     LONGLONG newvalue;BOOL ret;
