@@ -207,7 +207,7 @@ void APIENTRY HOOK_glBegin(GLenum mode)
             if (mode == GL_POLYGON)
             {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                glLineWidth(1.0f);
+                glLineWidth((GLfloat)cfg.iWireframeWall);
                 glColor3f(1.0f, 1.0f, 1.0f);
             }
             else
@@ -218,7 +218,7 @@ void APIENTRY HOOK_glBegin(GLenum mode)
             if (mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN)
             {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                glLineWidth(1.0f);
+                glLineWidth((GLfloat)cfg.iWiremodels);
             }
             else if (cfg.iWallHack != 3)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
