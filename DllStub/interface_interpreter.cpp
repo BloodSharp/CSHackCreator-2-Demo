@@ -150,6 +150,72 @@ void DllStub::Interface::Initialize()
 {
 	ImGui::GetStyle().WindowTitleAlign = ImVec2(0.5f, 0.5f);
 }
+
+void Children(Node* masterNode);
+
+void Children(Node* masterNode)
+{
+	switch (masterNode->iNodeType)
+	{
+		case NodeTypeWindow:
+			ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x * 0.5f, ImGui::GetIO().DisplaySize.y * 0.5f), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
+			if (ImGui::Begin(masterNode->szText, 0, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize))
+			{
+				for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				ImGui::End();
+			}
+			break;
+		case NodeTypeTabBar:
+			if (ImGui::BeginTabBar(masterNode->szText))
+			{
+				for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				ImGui::EndTabBar();
+			}
+			break;
+		case NodeTypeTabItem:
+			if (ImGui::BeginTabItem(masterNode->szText))
+			{
+				for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				ImGui::EndTabItem();
+			}
+			break;
+		//NodeTypeVariableEquals,
+		//NodeTypeVariableSetValue,
+		case NodeTypeGroup:
+			break;
+		case NodeTypeText:
+			ImGui::Text(masterNode->szText);
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 1)
+				{
+					if (ImGui::IsItemHovered())
+					{
+						Children(Nodes[masterNode->connections[i].uiTargetNode]);
+					}
+				}
+				else if (masterNode->connections[i].uiSourceSlot == 0)
+				{
+					ImGui::SameLine();
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				}
+			}
+			break;
+		//NodeTypeButton,
+		case NodeTypeComboBox:
+			break;
+		case NodeTypeCheckBox:
+			break;
+		case NodeTypeToolTip:
+			ImGui::SetTooltip(masterNode->szText);
+			break;
+		case NodeTypeNewLine:
+			ImGui::NewLine();
+			break;
+	}
 }
 
 void DllStub::Interface::Interface()
