@@ -38,16 +38,18 @@ struct Node
 
 	//Variables
 	char szText[MAX_PATH];
-	ImVec2 vSize;
-	double dbVariable;
 	int iVariable_1;
+	int iVariable_2;
+	int iVariable_3;
 
 	explicit Node()
 	{
 		connections.clear();
 		fYPosition = 0;
 		iNodeType = -1;
-		vSize = ImVec2(0.0f, 0.0f);
+		iVariable_1 = -1;
+		iVariable_2 = -1;
+		iVariable_3 = -3;
 	}
 };
 
@@ -78,10 +80,12 @@ void DllStub::Interface::LoadInterpreter(Json::Value&settings)
 			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"], &tmpNode->fYPosition);
 			//
 			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Text"], tmpNode->szText, MAX_PATH - 1);
-			GetVal(settings["Nodes"][std::to_string(i).c_str()]["dbVariable"], &tmpNode->dbVariable);
+			//GetVal(settings["Nodes"][std::to_string(i).c_str()]["dbVariable"], &tmpNode->dbVariable);
 			GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_1"], &tmpNode->iVariable_1);
-			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["X"], &tmpNode->vSize.x);
-			GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["Y"], &tmpNode->vSize.y);
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_2"], &tmpNode->iVariable_2);
+			GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_3"], &tmpNode->iVariable_3);
+			//GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["X"], &tmpNode->vSize.x);
+			//GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["Y"], &tmpNode->vSize.y);
 
 			Nodes.push_back(tmpNode);
 		}

@@ -589,10 +589,12 @@ void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
         GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"], &node->pos.y);
         //
         GetVal(settings["Nodes"][std::to_string(i).c_str()]["Text"], node->szText, MAX_PATH - 1);
-        GetVal(settings["Nodes"][std::to_string(i).c_str()]["dbVariable"], &node->dbVariable);
+        //GetVal(settings["Nodes"][std::to_string(i).c_str()]["dbVariable"], &node->dbVariable);
         GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_1"], &node->iVariable_1);
-        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["X"], &node->vSize.x);
-        GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["Y"], &node->vSize.y);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_2"], &node->iVariable_2);
+        GetVal(settings["Nodes"][std::to_string(i).c_str()]["iVariable_3"], &node->iVariable_3);
+        //GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["X"], &node->vSize.x);
+        //GetVal(settings["Nodes"][std::to_string(i).c_str()]["Size"]["Y"], &node->vSize.y);
         //
 
         // Procesar el nodo al vector
@@ -685,10 +687,12 @@ void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
 void ProcessSpecialSaveVariables(Json::Value& settings, int offset)
 {
     settings["Nodes"][std::to_string(offset).c_str()]["Text"] = CSHackCreator::Settings::Nodes[offset]->szText;
-    settings["Nodes"][std::to_string(offset).c_str()]["dbVariable"] = CSHackCreator::Settings::Nodes[offset]->dbVariable;
+    //settings["Nodes"][std::to_string(offset).c_str()]["dbVariable"] = CSHackCreator::Settings::Nodes[offset]->dbVariable;
     settings["Nodes"][std::to_string(offset).c_str()]["iVariable_1"] = CSHackCreator::Settings::Nodes[offset]->iVariable_1;
-    settings["Nodes"][std::to_string(offset).c_str()]["Size"]["X"] = CSHackCreator::Settings::Nodes[offset]->vSize.x;
-    settings["Nodes"][std::to_string(offset).c_str()]["Size"]["Y"] = CSHackCreator::Settings::Nodes[offset]->vSize.y;
+    settings["Nodes"][std::to_string(offset).c_str()]["iVariable_2"] = CSHackCreator::Settings::Nodes[offset]->iVariable_2;
+    settings["Nodes"][std::to_string(offset).c_str()]["iVariable_3"] = CSHackCreator::Settings::Nodes[offset]->iVariable_3;
+    //settings["Nodes"][std::to_string(offset).c_str()]["Size"]["X"] = CSHackCreator::Settings::Nodes[offset]->vSize.x;
+    //settings["Nodes"][std::to_string(offset).c_str()]["Size"]["Y"] = CSHackCreator::Settings::Nodes[offset]->vSize.y;
 }
 
 void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
