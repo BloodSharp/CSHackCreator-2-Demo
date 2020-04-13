@@ -511,6 +511,8 @@ const char* GetNodeTitle(int iNodeType)
         */
         case NodeTypeWindow:
             return szWindow;
+        case NodeTypeSlider:
+            return szSlider;
         default:
             return 0;
     }
