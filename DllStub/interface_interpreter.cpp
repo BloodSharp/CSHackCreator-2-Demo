@@ -275,6 +275,26 @@ void Children(Node* masterNode)
 		case NodeTypeNewLine:
 			ImGui::NewLine();
 			break;
+		case NodeTypeSlider:
+			ImGui::PushItemWidth(105);
+			ImGui::SliderInt(szSliders[masterNode->iVariable_1], &cfg.Sliders[masterNode->iVariable_1], masterNode->iVariable_2, masterNode->iVariable_3);
+			ImGui::PopItemWidth();
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 1)
+				{
+					if (ImGui::IsItemHovered())
+					{
+						Children(Nodes[masterNode->connections[i].uiTargetNode]);
+					}
+				}
+				else if (masterNode->connections[i].uiSourceSlot == 0)
+				{
+					ImGui::SameLine();
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				}
+			}
+			break;
 	}
 }
 
