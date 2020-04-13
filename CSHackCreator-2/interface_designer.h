@@ -68,8 +68,8 @@ struct MyNode
 
     /// Properties of each node
     char szText[MAX_PATH]; // Window title or simple text
-    unsigned int uiNodeType = 0;
     double dbVariable = 0.0;
+    int iNodeType = 0;
     int iVariable_1 = 0;
     int iVariable_2 = 0;
     ImVec2 vSize = ImVec2(0.0f, 0.0f);

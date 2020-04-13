@@ -207,7 +207,7 @@ void ProcessWindowContent(MyNode* node, float zoom)
 {
     if (node->title == szWindow)
     {
-        node->uiNodeType = NodeTypeWindow;
+        node->iNodeType = NodeTypeWindow;
         ImGui::PushItemWidth(200 * zoom);
         ImGui::InputText("Title", node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
@@ -218,7 +218,7 @@ void ProcessTabBarContent(MyNode* node, float zoom)
 {
     if (node->title == szTabBar)
     {
-        node->uiNodeType = NodeTypeTabBar;
+        node->iNodeType = NodeTypeTabBar;
         ImGui::PushItemWidth(200 * zoom);
         ImGui::InputText("ID", node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
@@ -229,7 +229,7 @@ void ProcessTabBarItemContent(MyNode* node, float zoom)
 {
     if (node->title == szTabItem)
     {
-        node->uiNodeType = NodeTypeTabItem;
+        node->iNodeType = NodeTypeTabItem;
         ImGui::PushItemWidth(200 * zoom);
         ImGui::InputText("Title bar", node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
@@ -266,7 +266,7 @@ void ProcessGroupContent(MyNode* node)
 {
     if (node->title == szGroupBox)
     {
-        node->uiNodeType = NodeTypeGroup;
+        node->iNodeType = NodeTypeGroup;
     }
 }
 
@@ -274,7 +274,7 @@ void ProcessTextContent(MyNode* node, float zoom)
 {
     if (node->title == szText)
     {
-        node->uiNodeType = NodeTypeText;
+        node->iNodeType = NodeTypeText;
         ImGui::PushItemWidth(200 * zoom);
         ImGui::InputText("Value", node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
@@ -299,7 +299,7 @@ void ProcessComboBoxContent(MyNode* node, float zoom)
 {
     if (node->title == szComboBox)
     {
-        node->uiNodeType = NodeTypeComboBox;
+        node->iNodeType = NodeTypeComboBox;
         ImGui::PushItemWidth(200 * zoom);
         //ImGui::Combo("Hack variable", &node->iVariable_1, szCvarsStringsComboBox, IM_ARRAYSIZE(szCvarsStringsComboBox), 10);
         ImGui::PopItemWidth();
@@ -310,7 +310,7 @@ void ProcessCheckBoxContent(MyNode* node, float zoom)
 {
     if (node->title == szCheckBox)
     {
-        node->uiNodeType = NodeTypeCheckBox;
+        node->iNodeType = NodeTypeCheckBox;
         ImGui::PushItemWidth(200 * zoom);
         //ImGui::Combo("Hack variable", &node->iVariable_1, szCvarsStringsCheckBox, IM_ARRAYSIZE(szCvarsStringsCheckBox), 10);
         ImGui::PopItemWidth();
@@ -321,7 +321,7 @@ void ProcessToolTipContent(MyNode* node, float zoom)
 {
     if (node->title == szToolTip)
     {
-        node->uiNodeType = NodeTypeToolTip;
+        node->iNodeType = NodeTypeToolTip;
         ImGui::PushItemWidth(200 * zoom);
         ImGui::InputText(szText, node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
@@ -331,14 +331,14 @@ void ProcessToolTipContent(MyNode* node, float zoom)
 void ProcessNewLineContent(MyNode* node)
 {
     if (node->title == szNewLine)
-        node->uiNodeType = NodeTypeNewLine;
+        node->iNodeType = NodeTypeNewLine;
 }
 
 void ProcessSliderContent(MyNode* node, float zoom)
 {
     if (node->title == szSlider)
     {
-        node->uiNodeType = NodeTypeSlider;
+        node->iNodeType = NodeTypeSlider;
         ImGui::PushItemWidth(200 * zoom);
         // TODO Slider features
         ImGui::PopItemWidth();
@@ -457,9 +457,9 @@ void CSHackCreator::Interface::Designer()
     ImNodes::EndCanvas();
 }
 
-const char* GetNodeTitle(int uiNodeType)
+const char* GetNodeTitle(int iNodeType)
 {
-    switch (uiNodeType)
+    switch (iNodeType)
     {
         //case NodeTypeButton:
         //    return szButton;
@@ -557,7 +557,7 @@ void CSHackCreator::Settings::OpenNodes(Json::Value& settings)
         if (!node)
             continue;
 
-        node->uiNodeType = (unsigned int)iNodeType;
+        node->iNodeType = (unsigned int)iNodeType;
         node->szText[0] = 0;
         GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["X"], &node->pos.x);
         GetVal(settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"], &node->pos.y);
@@ -671,7 +671,7 @@ void CSHackCreator::Settings::SaveNodes(Json::Value& settings)
 
     for (unsigned int i = 0; i < CSHackCreator::Settings::Nodes.size(); i++)
     {
-        settings["Nodes"][std::to_string(i).c_str()]["Type"] = CSHackCreator::Settings::Nodes[i]->uiNodeType;
+        settings["Nodes"][std::to_string(i).c_str()]["Type"] = CSHackCreator::Settings::Nodes[i]->iNodeType;
         settings["Nodes"][std::to_string(i).c_str()]["Position"]["X"] = CSHackCreator::Settings::Nodes[i]->pos.x;
         settings["Nodes"][std::to_string(i).c_str()]["Position"]["Y"] = CSHackCreator::Settings::Nodes[i]->pos.y;
         #ifdef _DEBUG
