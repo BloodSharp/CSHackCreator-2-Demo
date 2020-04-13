@@ -650,6 +650,7 @@ LRESULT CALLBACK HOOK_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             {
                 SaveConfig();
             }
+            return TRUE;
         }
         if (bInterfaceOpen)
             if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
