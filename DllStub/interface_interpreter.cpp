@@ -157,6 +157,44 @@ void DllStub::Interface::Initialize()
 
 void Children(Node* masterNode);
 
+const char *szCheckBoxes[]=
+{
+	"Master Switch",
+	"No Smoke",
+	"No Flash",
+	"No Sky",
+	"ESP Box",
+	"BunnyHop",
+	"Zoom",
+};
+
+const char* szComboBoxes[]=
+{
+	"Wall Hack",
+	"Extra Walls",
+	"Extra Models",
+	"Aim Team",
+};
+
+const char* szComboBoxesOptions[]
+{
+	"Disabled\0Models\0Transparent\0Wireframe\0\0",
+	"Disabled\0Full Bright\0White Walls\0Night Mode\0\0",
+	"Disabled\0Lambert\0Dark\0Colored\0\0",
+	"Disabled\0CTs\0TTs\0\0",
+};
+
+const char*szSliders[]=
+{
+	"Wireframe Wall",
+	"Wire Models",
+	"CrossHair",
+	"No Recoil",
+	"SpeedHack",
+};
+
+extern cvar cfg;
+
 void Children(Node* masterNode)
 {
 	switch (masterNode->iNodeType)
