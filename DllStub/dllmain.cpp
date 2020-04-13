@@ -470,6 +470,13 @@ void APIENTRY HOOK_glEnable(GLenum mode)
     {
         if (mode == GL_TEXTURE_2D)
             bTex = 1;
+        //GUI
+        if (bDrawn)
+        {
+            if (cfg.Sliders[LIBRARY_SLIDER_CROSSHAIR])
+                DrawCross(cfg.Sliders[LIBRARY_SLIDER_CROSSHAIR]);
+            bDrawn = FALSE;
+        }
     }
     pOrig_glEnable(mode);
 }
@@ -483,6 +490,7 @@ void APIENTRY HOOK_glDisable(GLenum mode)
 
 void APIENTRY HOOK_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
+    bDrawn = TRUE;//GUI
     if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
         if (modelviewport)
