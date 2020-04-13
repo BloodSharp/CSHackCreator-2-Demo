@@ -252,6 +252,22 @@ void Children(Node* masterNode)
 			}
 			break;
 		case NodeTypeCheckBox:
+			ImGui::Checkbox(szCheckBoxes[masterNode->iVariable_1], &cfg.CheckBoxes[masterNode->iVariable_1]);
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 1)
+				{
+					if (ImGui::IsItemHovered())
+					{
+						Children(Nodes[masterNode->connections[i].uiTargetNode]);
+					}
+				}
+				else if (masterNode->connections[i].uiSourceSlot == 0)
+				{
+					ImGui::SameLine();
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				}
+			}
 			break;
 		case NodeTypeToolTip:
 			ImGui::SetTooltip(masterNode->szText);
