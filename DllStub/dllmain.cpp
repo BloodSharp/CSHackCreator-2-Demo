@@ -52,7 +52,7 @@ POINT pt; model_s model; player_s player;
 char szConfigFile[MAX_PATH];
 GLint iView[4]; GLdouble dModel[16], dProy[16]; unsigned int coil = 0;
 GLboolean bOnSpeed = 0, bKeyAimbot = 0, bShoot = 0, bHasTarget = 0, bSmoke = 0, bSky = 0, bFlash = 0,
-bTex = 0, bDrawn = 0, modelviewport = 0, bLeftButtonDown = 0;
+bTex = 0, bDrawn = 0, modelviewport = 0, bLeftButtonDown = 0, bMiddleButtonDown = 0;
 cvar cfg;
 
 bool bInterfaceOpen = true;
@@ -532,7 +532,7 @@ BOOL WINAPI HOOK_QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
         oldrealvalue=lpPerformanceCount->QuadPart;
     }
     ret=pOrig_QueryPerformanceCounter(lpPerformanceCount);
-    if (bKeyAimbot && cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK])
+    if (bMiddleButtonDown && cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK])
     {
         if (cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] < 0)
         {
@@ -541,7 +541,7 @@ BOOL WINAPI HOOK_QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
             factor = 1.0 + (float)cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] / 10;
         }
         else
-            factor = cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] * 10;
+            factor = cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] * 3;
     }
     newvalue=lpPerformanceCount->QuadPart;
     newvalue=oldfakevalue+(LONGLONG)((newvalue-oldrealvalue)*factor);
@@ -669,9 +669,19 @@ LRESULT CALLBACK HOOK_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                     keybd_event(VK_SPACE, MapVirtualKey(VK_SPACE, 0), KEYEVENTF_KEYUP, 0);
             }
             if (uMsg == WM_LBUTTONDOWN)
+            {
                 bKeyAimbot = TRUE;
+                bLeftButtonDown = TRUE;
+            }
             if (uMsg == WM_LBUTTONUP)
+            {
                 bKeyAimbot = FALSE;
+                bLeftButtonDown = FALSE;
+            }
+            if (uMsg == WM_MBUTTONDOWN)
+                bMiddleButtonDown = TRUE;
+            if (uMsg == WM_MBUTTONUP)
+                bMiddleButtonDown = FALSE;
             if (uMsg == WM_MOUSEWHEEL)
             {
                 if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
