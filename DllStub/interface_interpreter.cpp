@@ -189,6 +189,28 @@ void Children(Node* masterNode)
 		//NodeTypeVariableEquals,
 		//NodeTypeVariableSetValue,
 		case NodeTypeGroup:
+			ImGui::BeginGroup();
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 0)
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+			}
+			ImGui::EndGroup();
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 2)
+				{
+					if (ImGui::IsItemHovered())
+					{
+						Children(Nodes[masterNode->connections[i].uiTargetNode]);
+					}
+				}
+				else if (masterNode->connections[i].uiSourceSlot == 1)
+				{
+					ImGui::SameLine();
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				}
+			}
 			break;
 		case NodeTypeText:
 			ImGui::Text(masterNode->szText);
