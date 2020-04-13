@@ -145,6 +145,78 @@ void DrawBox(GLfloat x, GLfloat y, GLfloat dist)
     pOrig_glDisable(GL_POINT_SMOOTH);
 }
 
+void FillRGBA(GLint x, GLint y, GLint w, GLint h, int r, int g, int b, int a)
+{
+    pOrig_glPushMatrix();
+    glLoadIdentity();
+
+    pOrig_glDisable(GL_TEXTURE_2D);
+    pOrig_glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor4f((float)r / 255.0f, (float)g / 255.0f, (float)b / 255.0f, (float)a / 255.0f);
+    pOrig_glBegin(GL_QUADS);
+    pOrig_glVertex2f(GLfloat(x), GLfloat(y));
+    pOrig_glVertex2f(GLfloat(x + w), GLfloat(y));
+    pOrig_glVertex2f(GLfloat(x + w), GLfloat(y + h));
+    pOrig_glVertex2f(GLfloat(x), GLfloat(y + h));
+    glEnd();
+    pOrig_glDisable(GL_BLEND);
+    pOrig_glEnable(GL_TEXTURE_2D);
+
+    pOrig_glPopMatrix();
+}
+
+void DrawCross(int type)
+{
+    GLint iDim[4];
+    glGetIntegerv(GL_VIEWPORT, iDim);
+    int xcross = iDim[2] / 2;
+    int ycross = iDim[3] / 2;
+
+    int r = 255, g = 255, b = 255, a = 200;
+    int R = 255, G = 0, B = 0, A = 200;
+
+    switch (type)
+    {
+        case 1:
+            FillRGBA(xcross - 14, ycross, 9, 1, r, g, b, a);
+            FillRGBA(xcross + 5, ycross, 9, 1, r, g, b, a);
+            FillRGBA(xcross, ycross - 14, 1, 9, r, g, b, a);
+            FillRGBA(xcross, ycross + 5, 1, 9, r, g, b, a);
+            FillRGBA(xcross, ycross, 1, 1, R, G, B, A); // center
+            break;
+        case 2:
+            FillRGBA(xcross - 25, ycross, 50, 1, r, g, b, a);
+            FillRGBA(xcross, ycross - 25, 1, 50, r, g, b, a);
+            FillRGBA(xcross - 5, ycross, 10, 1, R, G, B, A);
+            FillRGBA(xcross, ycross - 5, 1, 10, R, G, B, A);
+            break;
+        case 3:
+            FillRGBA(xcross - 25, ycross, 50, 2, r, g, b, a);
+            FillRGBA(xcross, ycross - 25, 2, 50, r, g, b, a);
+            FillRGBA(xcross - 5, ycross, 10, 2, R, G, B, A);
+            FillRGBA(xcross, ycross - 5, 2, 10, R, G, B, A);
+            break;
+        case 4:
+            FillRGBA(xcross - 25, ycross - 25, 50, 1, 255, 255, 255, 180);
+            FillRGBA(xcross - 25, ycross + 25, 50, 1, 255, 255, 255, 180);
+            FillRGBA(xcross - 25, ycross - 25 + 1, 1, 50 - 1, 255, 255, 255, 180);
+            FillRGBA(xcross + 25, ycross - 25, 1, 50 + 1, 255, 255, 255, 180);
+            FillRGBA(xcross, ycross - 25 + 1, 1, 50 - 1, 0, 160, 0, 180);
+            FillRGBA(xcross - 25 + 1, ycross, 50 - 1, 1, 0, 160, 0, 180);
+            break;
+        case 5:
+            FillRGBA(0, ycross, 2 * xcross, 1, r, g, b, a);
+            FillRGBA(xcross, 0, 1, 2 * ycross, r, g, b, a);
+            FillRGBA(xcross - 5, ycross, 10, 1, R, G, B, A);
+            FillRGBA(xcross, ycross - 5, 1, 10, R, G, B, A);
+            break;
+        default:
+            FillRGBA(xcross - 1, ycross, 3, 1, R, G, B, A);
+            FillRGBA(xcross, ycross - 1, 1, 3, R, G, B, A);
+            break;
+    }
+}
 
 void APIENTRY HOOK_glBegin(GLenum mode)
 {
