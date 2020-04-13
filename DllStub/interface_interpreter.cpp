@@ -232,6 +232,24 @@ void Children(Node* masterNode)
 			break;
 		//NodeTypeButton,
 		case NodeTypeComboBox:
+			ImGui::PushItemWidth(105);
+			ImGui::Combo(szComboBoxes[masterNode->iVariable_1], &cfg.ComboBoxes[masterNode->iVariable_1], szComboBoxesOptions[masterNode->iVariable_1]);
+			ImGui::PopItemWidth();
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 1)
+				{
+					if (ImGui::IsItemHovered())
+					{
+						Children(Nodes[masterNode->connections[i].uiTargetNode]);
+					}
+				}
+				else if (masterNode->connections[i].uiSourceSlot == 0)
+				{
+					ImGui::SameLine();
+					Children(Nodes[masterNode->connections[i].uiTargetNode]);
+				}
+			}
 			break;
 		case NodeTypeCheckBox:
 			break;
