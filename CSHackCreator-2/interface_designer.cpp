@@ -85,10 +85,7 @@ std::map<std::string, MyNode * (*)()> available_nodes
     {
         szWindow, []() -> MyNode*
         {
-            return new MyNode(szWindow,
-            {
-                {"Variable",NodeKindItems}
-            },
+            return new MyNode(szWindow,SlotTypeOutput,
             {
                 {szItems,NodeKindItems}
             });
