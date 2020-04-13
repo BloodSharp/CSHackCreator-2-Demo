@@ -653,12 +653,14 @@ LRESULT CALLBACK HOOK_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
             return TRUE;
         }
         if (bInterfaceOpen)
+        {
             if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
             {
                 if ((uMsg == WM_KEYUP || uMsg == WM_SYSKEYUP) && (wParam < 256))
                     return CallWindowProc(pHLWndProc, hWnd, uMsg, wParam, lParam);
                 return TRUE;
             }
+        }
     }
     return CallWindowProc(pHLWndProc, hWnd, uMsg, wParam, lParam);
 }
