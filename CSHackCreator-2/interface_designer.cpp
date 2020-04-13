@@ -206,7 +206,10 @@ void ProcessWindowContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeWindow;
         ImGui::PushItemWidth(200 * zoom);
-        ImGui::InputText("Title", node->szText, IM_ARRAYSIZE(node->szText));
+        ImGui::InputTextWithHint(
+            /*Title*/XorStr<0x4B, 6, 0x492A3A0B>("\x1F\x25\x39\x22\x2A" + 0x492A3A0B).s,
+            /*MyHack - BloodSharp*/XorStr<0x85, 20, 0xC1CA5C24>("\xC8\xFF\xCF\xE9\xEA\xE1\xAB\xA1\xAD\xCC\xE3\xFF\xFE\xF6\xC0\xFC\xF4\xE4\xE7" + 0xC1CA5C24).s,
+            node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
     }
 }
@@ -217,7 +220,10 @@ void ProcessTabBarContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeTabBar;
         ImGui::PushItemWidth(200 * zoom);
-        ImGui::InputText("ID", node->szText, IM_ARRAYSIZE(node->szText));
+        ImGui::InputTextWithHint(
+            /*ID*/XorStr<0x8D, 3, 0x21F1E17F>("\xC4\xCA" + 0x21F1E17F).s,
+            /*Any identifier you want*/XorStr<0x9B, 24, 0x6DD82A89>("\xDA\xF2\xE4\xBE\xF6\xC4\xC4\xCC\xD7\xCD\xC3\xCF\xC2\xDA\x89\xD3\xC4\xD9\x8D\xD9\xCE\xDE\xC5" + 0x6DD82A89).s,
+            node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
     }
 }
@@ -228,7 +234,7 @@ void ProcessTabBarItemContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeTabItem;
         ImGui::PushItemWidth(200 * zoom);
-        ImGui::InputText("Title bar", node->szText, IM_ARRAYSIZE(node->szText));
+        ImGui::InputText(/*Title bar*/XorStr<0x54, 10, 0x2EAA65C1>("\x00\x3C\x22\x3B\x3D\x79\x38\x3A\x2E" + 0x2EAA65C1).s, node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
     }
 }
@@ -273,7 +279,7 @@ void ProcessTextContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeText;
         ImGui::PushItemWidth(200 * zoom);
-        ImGui::InputText("Value", node->szText, IM_ARRAYSIZE(node->szText));
+        ImGui::InputText(/*Value*/XorStr<0xCB, 6, 0x96EE403F>("\x9D\xAD\xA1\xBB\xAA" + 0x96EE403F).s, node->szText, IM_ARRAYSIZE(node->szText));
         ImGui::PopItemWidth();
     }
 }
@@ -298,7 +304,10 @@ void ProcessComboBoxContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeComboBox;
         ImGui::PushItemWidth(200 * zoom);
-        //ImGui::Combo("Hack variable", &node->iVariable_1, szCvarsStringsComboBox, IM_ARRAYSIZE(szCvarsStringsComboBox), 10);
+        ImGui::Combo(
+            /*Hack variable*/XorStr<0x58, 14, 0xA34A3640>("\x10\x38\x39\x30\x7C\x2B\x3F\x2D\x09\x00\x00\x0F\x01" + 0xA34A3640).s,
+            &node->iVariable_1,
+            /*Wall Hack\0Extra Walls\0Extra Models\0Aim Team\0\0*/XorStr<0xE0, 46, 0x3F94CFF6>("\xB7\x80\x8E\x8F\xC4\xAD\x87\x84\x83\xE9\xAF\x93\x98\x9F\x8F\xCF\xA7\x90\x9E\x9F\x87\xF5\xB3\x8F\x8C\x8B\x9B\xDB\xB1\x92\x9A\x9A\x6C\x72\x02\x42\x6D\x68\x26\x53\x6D\x68\x67\x0B\x0C" + 0x3F94CFF6).s);
         ImGui::PopItemWidth();
     }
 }
@@ -309,7 +318,10 @@ void ProcessCheckBoxContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeCheckBox;
         ImGui::PushItemWidth(200 * zoom);
-        //ImGui::Combo("Hack variable", &node->iVariable_1, szCvarsStringsCheckBox, IM_ARRAYSIZE(szCvarsStringsCheckBox), 10);
+        ImGui::Combo(
+            /*Hack variable*/XorStr<0xEF, 14, 0xB9FEF6CA>("\xA7\x91\x92\x99\xD3\x82\x94\x84\x9E\x99\x9B\x96\x9E" + 0xB9FEF6CA).s,
+            &node->iVariable_1,
+            /*Master Switch\0No Smoke\0No Flash\0No Sky\0ESP Box\0BunnyHop\0Zoom\0\0*/XorStr<0x24, 63, 0x456C56CE>("\x69\x44\x55\x53\x4D\x5B\x0A\x78\x5B\x44\x5A\x4C\x58\x31\x7C\x5C\x14\x66\x5B\x58\x53\x5C\x3A\x75\x53\x1D\x78\x53\x21\x32\x2A\x43\x0A\x2A\x66\x14\x23\x30\x4A\x0E\x1F\x1D\x6E\x0D\x3F\x29\x52\x11\x21\x3B\x38\x2E\x10\x36\x2A\x5B\x06\x32\x31\x32\x60\x61" + 0x456C56CE).s);
         ImGui::PopItemWidth();
     }
 }
@@ -337,7 +349,8 @@ void ProcessSliderContent(MyNode* node, float zoom)
     {
         node->iNodeType = NodeTypeSlider;
         ImGui::PushItemWidth(200 * zoom);
-        // TODO Slider features
+        ImGui::Combo(/*Hack variable*/XorStr<0x43, 14, 0xAF990AE1>("\x0B\x25\x26\x2D\x67\x3E\x28\x38\x22\x2D\x2F\x22\x2A" + 0xAF990AE1).s, &node->iVariable_1,
+            /*Wireframe Wall\0Wire Models\0CrossHair\0No Recoil\0SpeedHack\0\0*/XorStr<0xA2, 59, 0x729176C6>("\xF5\xCA\xD6\xC0\xC0\xD5\xC9\xC4\xCF\x8B\xFB\xCC\xC2\xC3\xB0\xE6\xDB\xC1\xD1\x95\xFB\xD8\xDC\xDC\xD6\xC8\xBC\xFE\xCC\xD0\xB3\xB2\x8A\xA2\xAD\xB7\xC6\x89\xA7\xE9\x98\xAE\xAF\xA2\xA7\xA3\xD0\x82\xA2\xB6\xB1\xB1\x9E\xB6\xBB\xB2\xDA\xDB" + 0x729176C6).s);
         ImGui::PopItemWidth();
     }
 }
@@ -429,10 +442,10 @@ void CSHackCreator::Interface::Designer()
     if (ImGui::IsMouseReleased(1) && ImGui::IsWindowHovered() && !ImGui::IsMouseDragging(1))
     {
         ImGui::FocusWindow(ImGui::GetCurrentWindow());
-        ImGui::OpenPopup("NodesContextMenu");
+        ImGui::OpenPopup(/*NodesContextMenu*/XorStr<0x4E, 17, 0xF341A15F>("\x00\x20\x34\x34\x21\x10\x3B\x3B\x22\x32\x20\x2D\x17\x3E\x32\x28" + 0xF341A15F).s);
     }
 
-    if (ImGui::BeginPopup("NodesContextMenu"))
+    if (ImGui::BeginPopup(/*NodesContextMenu*/XorStr<0xA7, 17, 0x3F517CFC>("\xE9\xC7\xCD\xCF\xD8\xEF\xC2\xC0\xDB\xD5\xC9\xC6\xFE\xD1\xDB\xC3" + 0x3F517CFC).s))
     {
         for (const auto& desc : available_nodes)
         {
@@ -443,8 +456,10 @@ void CSHackCreator::Interface::Designer()
             }
         }
         ImGui::Separator();
-        if (ImGui::MenuItem("Reset Zoom"))
+        if (ImGui::MenuItem(/*Reset Zoom*/XorStr<0xBC, 11, 0x474CB760>("\xEE\xD8\xCD\xDA\xB4\xE1\x98\xAC\xAB\xA8" + 0x474CB760).s))
             canvas.zoom = 1;
+        if (ImGui::MenuItem(/*Reset Position*/XorStr<0xEB, 15, 0x1FCCD759>("\xB9\x89\x9E\x8B\x9B\xD0\xA1\x9D\x80\x9D\x81\x9F\x98\x96" + 0x1FCCD759).s))
+            canvas.offset = ImVec2(0.0f, 0.0f);
 
         if (ImGui::IsAnyMouseDown() && !ImGui::IsWindowHovered())
             ImGui::CloseCurrentPopup();
