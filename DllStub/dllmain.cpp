@@ -4,27 +4,6 @@ LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARA
 
 typedef struct
 {
-    bool bActivated;
-    int  iWallHack;
-    int  iExtraWalls;
-    bool bNoSmoke;
-    bool bNoFlash;
-    bool bNoSky;
-    int  iExtraModels;
-    int  iWireframeWall;
-    int  iWiremodels;
-    int  iCrosshair;
-    int  iAimTeam;
-    bool bEspBox;
-    bool bBunnyHop;
-    bool bZoom;
-    int  iZoom;
-    int  iNoRecoil;
-    int  iSpeed;
-}cvar;
-
-typedef struct
-{
     GLboolean get;
     GLfloat highest_x;
     GLfloat highest_y;
@@ -221,9 +200,9 @@ void DrawCross(int type)
 void APIENTRY HOOK_glBegin(GLenum mode)
 {
     float col[4];
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
-        switch (cfg.iWallHack)
+        switch (cfg.ComboBoxes[LIBRARY_COMBOBOX_WALLHACK])
         {
             case 1:
                 if (mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN)
@@ -251,19 +230,19 @@ void APIENTRY HOOK_glBegin(GLenum mode)
         }
         if (mode == GL_POLYGON)
         {
-            if (cfg.iExtraWalls == 3)
+            if (cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS] == 3)
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
-            else if (cfg.iExtraWalls == 2)
+            else if (cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS] == 2)
                 glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-            else if (cfg.iExtraWalls == 1 && bTex)
+            else if (cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS] == 1 && bTex)
                 pOrig_glDisable(GL_TEXTURE_2D);
         }
-        else if (cfg.iExtraModels == 2)
+        else if (cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS] == 2)
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
 
         if (mode == GL_QUADS)
         {
-            if (cfg.bNoFlash || cfg.bNoSmoke)
+            if (cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH] || cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE])
             {
                 glGetFloatv(GL_CURRENT_COLOR, col);
                 bSmoke = (col[0] == col[1] && col[0] == col[2] && col[0] != 0.0 && col[0] != 1.0);
@@ -274,25 +253,25 @@ void APIENTRY HOOK_glBegin(GLenum mode)
         else
             bSky = 0;
 
-        if (cfg.iWallHack == 3)
+        if (cfg.ComboBoxes[LIBRARY_COMBOBOX_WALLHACK] == 3)
         {
             if (mode == GL_POLYGON)
             {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                glLineWidth((GLfloat)cfg.iWireframeWall);
+                glLineWidth((GLfloat)cfg.Sliders[LIBRARY_SLIDER_WIREFRAMEWALL]);
                 glColor3f(1.0f, 1.0f, 1.0f);
             }
             else
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
-        if (cfg.iWiremodels)
+        if (cfg.Sliders[LIBRARY_SLIDER_WIREMODELS])
         {
             if (mode == GL_TRIANGLE_STRIP || mode == GL_TRIANGLE_FAN)
             {
                 glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                glLineWidth((GLfloat)cfg.iWiremodels);
+                glLineWidth((GLfloat)cfg.Sliders[LIBRARY_SLIDER_WIREMODELS]);
             }
-            else if (cfg.iWallHack != 3)
+            else if (cfg.ComboBoxes[LIBRARY_COMBOBOX_WALLHACK] != 3)
                 glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         }
     }
@@ -301,7 +280,7 @@ void APIENTRY HOOK_glBegin(GLenum mode)
 
 void APIENTRY HOOK_glClear(GLbitfield mask)
 {
-    if (cfg.bActivated && mask == GL_DEPTH_BUFFER_BIT)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] && mask == GL_DEPTH_BUFFER_BIT)
     {
         mask += GL_COLOR_BUFFER_BIT;
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -311,18 +290,18 @@ void APIENTRY HOOK_glClear(GLbitfield mask)
 
 void APIENTRY HOOK_glVertex2f(GLfloat x, GLfloat y)
 {
-    if (cfg.bActivated && cfg.bNoFlash && bFlash && x == 0.0 && y == 0.0)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] && cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH] && bFlash && x == 0.0 && y == 0.0)
         glColor4f(1.0f, 1.0f, 1.0f, 0.2f);
     pOrig_glVertex2f(x, y);
 }
 
 void APIENTRY HOOK_glVertex3fv(const GLfloat* v)
 {
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
-        if (cfg.bNoSmoke && bSmoke)
+        if (cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE] && bSmoke)
             return;
-        if ((cfg.bNoSky || cfg.iWallHack == 2) && bSky)
+        if ((cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_SKY] || cfg.ComboBoxes[LIBRARY_COMBOBOX_WALLHACK] == 2) && bSky)
             return;
         modelviewport = 1;
     }
@@ -331,7 +310,7 @@ void APIENTRY HOOK_glVertex3fv(const GLfloat* v)
 
 void APIENTRY HOOK_glVertex3f(GLfloat x, GLfloat y, GLfloat z)
 {
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
         if (player.vertex == 8)
         {
@@ -415,9 +394,9 @@ void APIENTRY HOOK_glVertex3f(GLfloat x, GLfloat y, GLfloat z)
             }
         }
         player.vertex++;
-        if (cfg.iExtraModels == 1)
+        if (cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS] == 1)
             glColor3f(1.0f, 1.0f, 1.0f);
-        if (cfg.iExtraModels == 3 && player.team)
+        if (cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS] == 3 && player.team)
             glColor3f(player.fr, player.fg, player.fb);
     }
     pOrig_glVertex3f(x, y, z);
@@ -426,7 +405,7 @@ void APIENTRY HOOK_glVertex3f(GLfloat x, GLfloat y, GLfloat z)
 void APIENTRY HOOK_glShadeModel(GLenum mode)
 {
     GLdouble wx, wz, wy;
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
         if ((mode == GL_SMOOTH) && (!model.get))
         {
@@ -445,16 +424,16 @@ void APIENTRY HOOK_glShadeModel(GLenum mode)
                     glGetDoublev(GL_PROJECTION_MATRIX, dProy);
                     glGetIntegerv(GL_VIEWPORT, iView);
                     gluProject(model.highest_x, model.highest_y, model.highest_z, dModel, dProy, iView, &wx, &wy, &wz);
-                    if (cfg.bEspBox)
+                    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_ESP_BOX])
                         DrawBox((GLfloat(wx) / (iView[2] / 2)) - 1.0f, (GLfloat(wy) / (iView[3] / 2)) - 1.0f, GLfloat(wz) - 1.0f);
-                    if (cfg.iAimTeam)
+                    if (cfg.ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM])
                     {
                         bHasTarget = ((abs((int)(iView[2] / 2 - wx)) < (iView[2] / 10)) && (abs((int)(iView[3] / 2 - wy)) < (iView[3] / 10)));
-                        if (bKeyAimbot && bHasTarget && (cfg.iAimTeam == 3 || cfg.iAimTeam == player.team))
+                        if (bKeyAimbot && bHasTarget && (cfg.ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM] == 3 || cfg.ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM] == player.team))
                         {
                             pt.x = (long)wx; pt.y = (long)(iView[3] - (wy - .01 / (wz - 1)));//(long)(iView[3]-wy);
-                            if(ClientToScreen(hdHalfLife,&pt))
-                                SetCursorPos(pt.x,pt.y);
+                            ClientToScreen(hdHalfLife, &pt);
+                            SetCursorPos(pt.x, pt.y);
                             bShoot = ((iView[2] / 2) == wx && (iView[3] / 2) == wy);
                         }
                         if (!bHasTarget)
@@ -470,7 +449,7 @@ void APIENTRY HOOK_glShadeModel(GLenum mode)
 
 void APIENTRY HOOK_glPushMatrix()
 {
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
         player.vertex = 0;
         player.team = 0;
@@ -480,14 +459,14 @@ void APIENTRY HOOK_glPushMatrix()
 
 void APIENTRY HOOK_glPopMatrix()
 {
-    if (cfg.bActivated && model.get)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] && model.get)
         model.get = 0;
     pOrig_glPopMatrix();
 }
 
 void APIENTRY HOOK_glEnable(GLenum mode)
 {
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
         if (mode == GL_TEXTURE_2D)
             bTex = 1;
@@ -497,14 +476,14 @@ void APIENTRY HOOK_glEnable(GLenum mode)
 
 void APIENTRY HOOK_glDisable(GLenum mode)
 {
-    if (cfg.bActivated && mode == GL_TEXTURE_2D)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] && mode == GL_TEXTURE_2D)
         bTex = 0;
     pOrig_glDisable(mode);
 }
 
 void APIENTRY HOOK_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 {
-    if (cfg.bActivated)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
     {
         if (modelviewport)
         {
@@ -512,7 +491,7 @@ void APIENTRY HOOK_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
             model.lowest_z = -99999;
             modelviewport = 0;
         }
-        if (cfg.iNoRecoil)
+        if (cfg.Sliders[LIBRARY_SLIDER_NORECOIL])
         {
             coil++;
             if (coil >= 6)
@@ -521,7 +500,7 @@ void APIENTRY HOOK_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
                 if (bLeftButtonDown)
                 {
                     GetCursorPos(&pt);
-                    SetCursorPos(pt.x,pt.y+cfg.iNoRecoil);
+                    SetCursorPos(pt.x, pt.y + cfg.Sliders[LIBRARY_SLIDER_NORECOIL]);
                 }
             }
         }
@@ -531,7 +510,7 @@ void APIENTRY HOOK_glViewport(GLint x, GLint y, GLsizei width, GLsizei height)
 
 void APIENTRY HOOK_glFrustum(GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble zNear, GLdouble zFar)
 {
-    if (cfg.bActivated && cfg.bZoom)
+    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] && cfg.CheckBoxes[LIBRARY_CHECKBOX_ZOOM])
     {
         top = zNear * tan((50 - cfg.iZoom * 5) * M_PI / 360);
         bottom = -top;
@@ -553,16 +532,16 @@ BOOL WINAPI HOOK_QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount)
         oldrealvalue=lpPerformanceCount->QuadPart;
     }
     ret=pOrig_QueryPerformanceCounter(lpPerformanceCount);
-    if(bKeyAimbot&&cfg.iSpeed)
+    if (bKeyAimbot && cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK])
     {
-        if(cfg.iSpeed<0)
+        if (cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] < 0)
         {
-            if(cfg.iSpeed<-9)
-                cfg.iSpeed=-9;
-            factor=1.0+(float)cfg.iSpeed/10;
+            if (cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] < -9)
+                cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] = -9;
+            factor = 1.0 + (float)cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] / 10;
         }
         else
-            factor=cfg.iSpeed*3;
+            factor = cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK] * 10;
     }
     newvalue=lpPerformanceCount->QuadPart;
     newvalue=oldfakevalue+(LONGLONG)((newvalue-oldrealvalue)*factor);
@@ -627,24 +606,24 @@ void InitializeDllStub(HMODULE hModule)
                                 strcpy_s(szConfigFile, MAX_PATH - 1, szModulePath);
                                 RtlZeroMemory(szModulePath, MAX_PATH);
 
-                                GetVal(settings["Library"]["MasterSwitch"], &cfg.bActivated);
-                                GetVal(settings["Library"]["NoSmoke"], &cfg.bNoSmoke);
-                                GetVal(settings["Library"]["NoFlash"], &cfg.bNoFlash);
-                                GetVal(settings["Library"]["NoSky"], &cfg.bNoSky);
-                                GetVal(settings["Library"]["EspBox"], &cfg.bEspBox);
-                                GetVal(settings["Library"]["BunnyHop"], &cfg.bBunnyHop);
-                                GetVal(settings["Library"]["Zoom"], &cfg.bZoom);
+                                GetVal(settings["Library"]["MasterSwitch"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH]);
+                                GetVal(settings["Library"]["NoSmoke"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_SMOKE]);
+                                GetVal(settings["Library"]["NoFlash"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_FLASH]);
+                                GetVal(settings["Library"]["NoSky"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_NO_SKY]);
+                                GetVal(settings["Library"]["EspBox"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_ESP_BOX]);
+                                GetVal(settings["Library"]["BunnyHop"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_BUNNY_HOP]);
+                                GetVal(settings["Library"]["Zoom"], &cfg.CheckBoxes[LIBRARY_CHECKBOX_ZOOM]);
 
-                                GetVal(settings["Library"]["WallHack"], &cfg.iWallHack);
-                                GetVal(settings["Library"]["ExtraWalls"], &cfg.iExtraWalls);
-                                GetVal(settings["Library"]["ExtraModels"], &cfg.iExtraModels);
-                                GetVal(settings["Library"]["AimTeam"], &cfg.iAimTeam);
+                                GetVal(settings["Library"]["WallHack"], &cfg.ComboBoxes[LIBRARY_COMBOBOX_WALLHACK]);
+                                GetVal(settings["Library"]["ExtraWalls"], &cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAWALLS]);
+                                GetVal(settings["Library"]["ExtraModels"], &cfg.ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS]);
+                                GetVal(settings["Library"]["AimTeam"], &cfg.ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM]);
 
-                                GetVal(settings["Library"]["WireFrameWall"], &cfg.iWireframeWall);
-                                GetVal(settings["Library"]["WireModels"], &cfg.iWiremodels);
-                                GetVal(settings["Library"]["CrossHair"], &cfg.iCrosshair);
-                                GetVal(settings["Library"]["Recoil"], &cfg.iNoRecoil);
-                                GetVal(settings["Library"]["Speed"], &cfg.iSpeed);
+                                GetVal(settings["Library"]["WireFrameWall"], &cfg.Sliders[LIBRARY_SLIDER_WIREFRAMEWALL]);
+                                GetVal(settings["Library"]["WireModels"], &cfg.Sliders[LIBRARY_SLIDER_WIREMODELS]);
+                                GetVal(settings["Library"]["CrossHair"], &cfg.Sliders[LIBRARY_SLIDER_CROSSHAIR]);
+                                GetVal(settings["Library"]["Recoil"], &cfg.Sliders[LIBRARY_SLIDER_NORECOIL]);
+                                GetVal(settings["Library"]["Speed"], &cfg.Sliders[LIBRARY_SLIDER_SPEEDHACK]);
 
                                 LoadConfig();
 
