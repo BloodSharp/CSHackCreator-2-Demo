@@ -661,6 +661,40 @@ LRESULT CALLBACK HOOK_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
                 return TRUE;
             }
         }
+        else
+        {
+            if (uMsg == WM_KEYDOWN && wParam == VK_SPACE)
+            {
+                if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH] && cfg.CheckBoxes[LIBRARY_CHECKBOX_BUNNY_HOP])
+                    keybd_event(VK_SPACE, MapVirtualKey(VK_SPACE, 0), KEYEVENTF_KEYUP, 0);
+            }
+            if (uMsg == WM_LBUTTONDOWN)
+                bKeyAimbot = TRUE;
+            if (uMsg == WM_LBUTTONUP)
+                bKeyAimbot = FALSE;
+            if (uMsg == WM_MOUSEWHEEL)
+            {
+                if (cfg.CheckBoxes[LIBRARY_CHECKBOX_MASTER_SWITCH])
+                {
+                    if (cfg.CheckBoxes[LIBRARY_CHECKBOX_ZOOM])
+                    {
+                        SHORT zDelta = HIWORD(wParam);
+                        if (zDelta > 0)
+                        {
+                            cfg.iZoom += 1;
+                            if (cfg.iZoom > 9)
+                                cfg.iZoom = 9;
+                        }
+                        if (zDelta < 0)
+                        {
+                            cfg.iZoom -= 1;
+                            if (cfg.iZoom < -9)
+                                cfg.iZoom = -9;
+                        }
+                    }
+                }
+            }
+        }
     }
     return CallWindowProc(pHLWndProc, hWnd, uMsg, wParam, lParam);
 }
