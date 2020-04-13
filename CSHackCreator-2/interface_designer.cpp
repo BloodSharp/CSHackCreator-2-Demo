@@ -352,6 +352,18 @@ void ProcessSliderContent(MyNode* node, float zoom)
         ImGui::Combo(/*Hack variable*/XorStr<0x43, 14, 0xAF990AE1>("\x0B\x25\x26\x2D\x67\x3E\x28\x38\x22\x2D\x2F\x22\x2A" + 0xAF990AE1).s, &node->iVariable_1,
             /*Wireframe Wall\0Wire Models\0CrossHair\0No Recoil\0SpeedHack\0\0*/XorStr<0xA2, 59, 0x729176C6>("\xF5\xCA\xD6\xC0\xC0\xD5\xC9\xC4\xCF\x8B\xFB\xCC\xC2\xC3\xB0\xE6\xDB\xC1\xD1\x95\xFB\xD8\xDC\xDC\xD6\xC8\xBC\xFE\xCC\xD0\xB3\xB2\x8A\xA2\xAD\xB7\xC6\x89\xA7\xE9\x98\xAE\xAF\xA2\xA7\xA3\xD0\x82\xA2\xB6\xB1\xB1\x9E\xB6\xBB\xB2\xDA\xDB" + 0x729176C6).s);
         ImGui::PopItemWidth();
+
+        //SpeedHack
+        if (node->iVariable_1 == 4)
+        {
+            node->iVariable_2 = -9;
+            node->iVariable_3 = 9;
+        }
+        else
+        {
+            node->iVariable_2 = 0;
+            node->iVariable_3 = 5;
+        }
     }
 }
 
