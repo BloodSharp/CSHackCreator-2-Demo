@@ -767,24 +767,24 @@ BOOL WINAPI HOOK_SwapBuffers(HDC hDc)
 DWORD WINAPI InitializeHooks(LPVOID lpThreadParameter)
 {
     // Hooking
-    HMODULE hOpenGL32 = LoadLibrary("opengl32.dll");
-    pOrig_glBegin = (decltype(pOrig_glBegin))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glBegin")), (PBYTE)HOOK_glBegin);
-    pOrig_glClear = (decltype(pOrig_glClear))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glClear")), (PBYTE)HOOK_glClear);
-    pOrig_glVertex2f = (decltype(pOrig_glVertex2f))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glVertex2f")), (PBYTE)HOOK_glVertex2f);
-    pOrig_glVertex3fv = (decltype(pOrig_glVertex3fv))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glVertex3fv")), (PBYTE)HOOK_glVertex3fv);
-    pOrig_glVertex3f = (decltype(pOrig_glVertex3f))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glVertex3f")), (PBYTE)HOOK_glVertex3f);
-    pOrig_glShadeModel = (decltype(pOrig_glShadeModel))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glShadeModel")), (PBYTE)HOOK_glShadeModel);
-    pOrig_glPushMatrix = (decltype(pOrig_glPushMatrix))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glPushMatrix")), (PBYTE)HOOK_glPushMatrix);
-    pOrig_glPopMatrix = (decltype(pOrig_glPopMatrix))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glPopMatrix")), (PBYTE)HOOK_glPopMatrix);
-    pOrig_glEnable = (decltype(pOrig_glEnable))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glEnable")), (PBYTE)HOOK_glEnable);
-    pOrig_glDisable = (decltype(pOrig_glDisable))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glDisable")), (PBYTE)HOOK_glDisable);
-    pOrig_glViewport = (decltype(pOrig_glViewport))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glViewport")), (PBYTE)HOOK_glViewport);
-    pOrig_glFrustum = (decltype(pOrig_glFrustum))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "glFrustum")), (PBYTE)HOOK_glFrustum);
+    HMODULE hOpenGL32 = LoadLibrary(/*opengl32.dll*/XorStr<0xE1, 13, 0x51665709>("\x8E\x92\x86\x8A\x82\x8A\xD4\xDA\xC7\x8E\x87\x80" + 0x51665709).s);
+    pOrig_glBegin = (decltype(pOrig_glBegin))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glBegin*/XorStr<0xE1, 8, 0xC6BB1BFB>("\x86\x8E\xA1\x81\x82\x8F\x89" + 0xC6BB1BFB).s)), (PBYTE)HOOK_glBegin);
+    pOrig_glClear = (decltype(pOrig_glClear))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glClear*/XorStr<0x97, 8, 0xEEB49253>("\xF0\xF4\xDA\xF6\xFE\xFD\xEF" + 0xEEB49253).s)), (PBYTE)HOOK_glClear);
+    pOrig_glVertex2f = (decltype(pOrig_glVertex2f))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glVertex2f*/XorStr<0x14, 11, 0x6AA1AFCE>("\x73\x79\x40\x72\x6A\x6D\x7F\x63\x2E\x7B" + 0x6AA1AFCE).s)), (PBYTE)HOOK_glVertex2f);
+    pOrig_glVertex3fv = (decltype(pOrig_glVertex3fv))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glVertex3fv*/XorStr<0x92, 12, 0xA51BAC39>("\xF5\xFF\xC2\xF0\xE4\xE3\xFD\xE1\xA9\xFD\xEA" + 0xA51BAC39).s)), (PBYTE)HOOK_glVertex3fv);
+    pOrig_glVertex3f = (decltype(pOrig_glVertex3f))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glVertex3f*/XorStr<0x62, 11, 0xEFF22D3E>("\x05\x0F\x32\x00\x14\x13\x0D\x11\x59\x0D" + 0xEFF22D3E).s)), (PBYTE)HOOK_glVertex3f);
+    pOrig_glShadeModel = (decltype(pOrig_glShadeModel))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glShadeModel*/XorStr<0x0F, 13, 0xF3602B6F>("\x68\x7C\x42\x7A\x72\x70\x70\x5B\x78\x7C\x7C\x76" + 0xF3602B6F).s)), (PBYTE)HOOK_glShadeModel);
+    pOrig_glPushMatrix = (decltype(pOrig_glPushMatrix))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glPushMatrix*/XorStr<0x18, 13, 0x2A1E4734>("\x7F\x75\x4A\x6E\x6F\x75\x53\x7E\x54\x53\x4B\x5B" + 0x2A1E4734).s)), (PBYTE)HOOK_glPushMatrix);
+    pOrig_glPopMatrix = (decltype(pOrig_glPopMatrix))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glPopMatrix*/XorStr<0x52, 12, 0xAE4B0C48>("\x35\x3F\x04\x3A\x26\x1A\x39\x2D\x28\x32\x24" + 0xAE4B0C48).s)), (PBYTE)HOOK_glPopMatrix);
+    pOrig_glEnable = (decltype(pOrig_glEnable))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glEnable*/XorStr<0x36, 9, 0x05912C33>("\x51\x5B\x7D\x57\x5B\x59\x50\x58" + 0x05912C33).s)), (PBYTE)HOOK_glEnable);
+    pOrig_glDisable = (decltype(pOrig_glDisable))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glDisable*/XorStr<0xBB, 10, 0xD270B7E9>("\xDC\xD0\xF9\xD7\xCC\xA1\xA3\xAE\xA6" + 0xD270B7E9).s)), (PBYTE)HOOK_glDisable);
+    pOrig_glViewport = (decltype(pOrig_glViewport))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glViewport*/XorStr<0xB2, 11, 0x18834223>("\xD5\xDF\xE2\xDC\xD3\xC0\xC8\xD6\xC8\xCF" + 0x18834223).s)), (PBYTE)HOOK_glViewport);
+    pOrig_glFrustum = (decltype(pOrig_glFrustum))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*glFrustum*/XorStr<0x7A, 10, 0x96CFA989>("\x1D\x17\x3A\x0F\x0B\x0C\xF4\xF4\xEF" + 0x96CFA989).s)), (PBYTE)HOOK_glFrustum);
 
-    pOrig_wglSwapBuffers= (decltype(pOrig_wglSwapBuffers))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, "wglSwapBuffers")), (PBYTE)HOOK_wglSwapBuffers);
-    pOrig_SwapBuffers = (decltype(pOrig_SwapBuffers))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(LoadLibrary("gdi32.dll"), "SwapBuffers")), (PBYTE)HOOK_SwapBuffers);
+    pOrig_wglSwapBuffers= (decltype(pOrig_wglSwapBuffers))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(hOpenGL32, /*wglSwapBuffers*/XorStr<0x67, 15, 0xE8F23608>("\x10\x0F\x05\x39\x1C\x0D\x1D\x2C\x1A\x16\x17\x17\x01\x07" + 0xE8F23608).s)), (PBYTE)HOOK_wglSwapBuffers);
+    pOrig_SwapBuffers = (decltype(pOrig_SwapBuffers))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(LoadLibrary(/*gdi32.dll*/XorStr<0x00, 10, 0x4A65018E>("\x67\x65\x6B\x30\x36\x2B\x62\x6B\x64" + 0x4A65018E).s), /*SwapBuffers*/XorStr<0x55, 12, 0xC2A6AC37>("\x06\x21\x36\x28\x1B\x2F\x3D\x3A\x38\x2C\x2C" + 0xC2A6AC37).s)), (PBYTE)HOOK_SwapBuffers);
 
-    pOrig_QueryPerformanceCounter = (decltype(pOrig_QueryPerformanceCounter))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(LoadLibrary("kernel32.dll"), "QueryPerformanceCounter")), (PBYTE)HOOK_QueryPerformanceCounter);
+    pOrig_QueryPerformanceCounter = (decltype(pOrig_QueryPerformanceCounter))CH4::Utils::DetourFunction(PBYTE(GetProcAddress(LoadLibrary(/*kernel32.dll*/XorStr<0xD7, 13, 0xF2EA8E87>("\xBC\xBD\xAB\xB4\xBE\xB0\xEE\xEC\xF1\x84\x8D\x8E" + 0xF2EA8E87).s), /*QueryPerformanceCounter*/XorStr<0x26, 24, 0x3FB621D7>("\x77\x52\x4D\x5B\x53\x7B\x49\x5F\x48\x40\x42\x5C\x53\x5D\x57\x50\x75\x58\x4D\x57\x4E\x5E\x4E" + 0x3FB621D7).s)), (PBYTE)HOOK_QueryPerformanceCounter);
 
     return 0;
 }
