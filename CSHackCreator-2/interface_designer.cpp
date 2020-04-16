@@ -359,6 +359,12 @@ void ProcessSliderContent(MyNode* node, float zoom)
             node->iVariable_2 = -9;
             node->iVariable_3 = 9;
         }
+        //Wireframe Wall
+        else if (node->iVariable_1 == 0)
+        {
+            node->iVariable_2 = 1;
+            node->iVariable_3 = 5;
+        }
         else
         {
             node->iVariable_2 = 0;

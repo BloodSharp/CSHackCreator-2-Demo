@@ -90,7 +90,7 @@ void CSHackCreator::Settings::New()
 	CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS] = 0;
 	CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM] = 0;
 
-	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL] = 0;
+	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL] = 1;
 	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREMODELS] = 0;
 	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_CROSSHAIR] = 0;
 	CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_NORECOIL] = 0;
@@ -245,7 +245,7 @@ void CSHackCreator::Interface::Settings()
 		ImGui::Combo(/*Extra Models*/XorStr<0x27, 13, 0xE10FB907>("\x62\x50\x5D\x58\x4A\x0C\x60\x41\x4B\x55\x5D\x41" + 0xE10FB907).s, &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_EXTRAMODELS], /*Disabled\0Lambert\0Dark\0Colored\0\0*/XorStr<0x30, 32, 0xB964B414>("\x74\x58\x41\x52\x56\x59\x53\x53\x38\x75\x5B\x56\x5E\x58\x4C\x4B\x40\x05\x23\x31\x2F\x45\x05\x28\x24\x26\x38\x2E\x28\x4D\x4E" + 0xB964B414).s);
 		ImGui::Combo(/*Aim Team*/XorStr<0x78, 9, 0x8F0DCED1>("\x39\x10\x17\x5B\x28\x18\x1F\x12" + 0x8F0DCED1).s, &CSHackCreator::Settings::Library::ComboBoxes[LIBRARY_COMBOBOX_AIMTEAM], /*Disabled\0CTs\0TTs\0\0*/XorStr<0xAF, 19, 0xAE69E67D>("\xEB\xD9\xC2\xD3\xD1\xD8\xD0\xD2\xB7\xFB\xED\xC9\xBB\xE8\xE9\xCD\xBF\xC0" + 0xAE69E67D).s);
 
-		ImGui::SliderInt(/*WireFrame Wall*/XorStr<0x24, 15, 0xE34A7739>("\x73\x4C\x54\x42\x6E\x5B\x4B\x46\x49\x0D\x79\x4E\x5C\x5D" + 0xE34A7739).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL], 0, 5);
+		ImGui::SliderInt(/*WireFrame Wall*/XorStr<0x24, 15, 0xE34A7739>("\x73\x4C\x54\x42\x6E\x5B\x4B\x46\x49\x0D\x79\x4E\x5C\x5D" + 0xE34A7739).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREFRAMEWALL], 1, 5);
 		ImGui::SliderInt(/*Wire Models*/XorStr<0x4A, 12, 0xEE40A126>("\x1D\x22\x3E\x28\x6E\x02\x3F\x35\x37\x3F\x27" + 0xEE40A126).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_WIREMODELS], 0, 5);
 		ImGui::SliderInt(/*CrossHair*/XorStr<0x29, 10, 0x48D66C0F>("\x6A\x58\x44\x5F\x5E\x66\x4E\x59\x43" + 0x48D66C0F).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_CROSSHAIR], 0, 5);
 		ImGui::SliderInt(/*No Recoil*/XorStr<0xA6, 10, 0x9544B0A2>("\xE8\xC8\x88\xFB\xCF\xC8\xC3\xC4\xC2" + 0x9544B0A2).s, &CSHackCreator::Settings::Library::Sliders[LIBRARY_SLIDER_NORECOIL], 0, 5);
