@@ -267,7 +267,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         g_pd3dDevice->SetRenderState(D3DRS_ZENABLE, false);
         g_pd3dDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, false);
         g_pd3dDevice->SetRenderState(D3DRS_SCISSORTESTENABLE, false);
-        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA(0, 0, 0, 255);
+
+        ImVec4 color = ImGui::GetStyle().Colors[ImGuiCol_WindowBg];
+        D3DCOLOR clear_col_dx = D3DCOLOR_RGBA(int(color.x * 255), int(color.y * 255), int(color.z * 255), 255);
         g_pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, clear_col_dx, 1.0f, 0);
         if (g_pd3dDevice->BeginScene() >= 0)
         {

@@ -44,7 +44,7 @@ void Dot::Draw(int index)
 			//	g_pSurface->DrawSetColor(Color(69, 140, 230, 255));
 			//	g_pSurface->Line(Pos.x, Pos.y, (Pos + Dir * Dist).x, (Pos + Dir * Dist).y, Color(255, 111, 15, 255));
             ImGui::GetCurrentWindow()->DrawList->AddLine({Pos.x,Pos.y},{(Pos+Dir*Dist).x,(Pos+Dir*Dist).y},
-                                                         ImColor(0,128,255),//CInterface::clWindowsColors[CH4_WINDOW_COLOR_TITLE_BACKGROUND],
+                                                        (ImColor)ImGui::GetStyle().Colors[ImGuiCol_TitleBgActive],//ImColor(0,128,255),//CInterface::clWindowsColors[CH4_WINDOW_COLOR_TITLE_BACKGROUND],
                                                          2.0f);
         }
     }
@@ -55,7 +55,7 @@ void Dot::Draw(int index)
 			CInterface::clWindowsColors[CH4_WINDOW_COLOR_TEXT_CONTENT],
 			0.0f);
     */
-    ImGui::GetCurrentWindow()->DrawList->AddCircleFilled({RelativePosition.x,RelativePosition.y},4+index/3,ImColor(255,255,255),36);
+    ImGui::GetCurrentWindow()->DrawList->AddCircleFilled({RelativePosition.x,RelativePosition.y},4+index/3,(ImColor)ImGui::GetStyle().Colors[ImGuiCol_Text],36);
     /*ImGui::GetCurrentWindow()->DrawList->AddTriangleFilled({RelativePosition.x-4,RelativePosition.y+2},
                                                            {RelativePosition.x+4,RelativePosition.y+2},
                                                            {RelativePosition.x,RelativePosition.y-4},CInterface::clWindowsColors[CH4_WINDOW_COLOR_TEXT_CONTENT]);*/
