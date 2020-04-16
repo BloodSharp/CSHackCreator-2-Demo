@@ -1,3 +1,7 @@
+#include "../COMPILE_FLAGS.h"
+
+#ifdef CSHACKCREATOR_V2_ENABLE_RADIO
+
 #include "CSHackCreator.h"
 #include "ch4_radio_windows.h"
 #include "Bass/dll.h"
@@ -70,3 +74,5 @@ void CH4::Radio::Play()
 		BASS_ChannelPlay(dwStream, false);
 	}
 }
+
+#endif//CSHACKCREATOR_V2_ENABLE_RADIO

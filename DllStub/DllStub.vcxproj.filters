@@ -104,5 +104,6 @@
     <ClInclude Include="DllStub.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
+    <ClInclude Include="..\COMPILE_FLAGS.h" />
   </ItemGroup>
 </Project>

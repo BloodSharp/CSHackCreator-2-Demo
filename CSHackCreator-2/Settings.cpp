@@ -169,6 +169,7 @@ void CSHackCreator::Settings::Save(Json::Value&settings)
 
 void CSHackCreator::Interface::Settings()
 {
+	#ifdef CSHACKCREATOR_V2_ENABLE_RADIO
 	if (ImGui::CollapsingHeader(/*Radio (Enjoy music while building your hack)*/XorStr<0x42, 45, 0x0954A532>("\x10\x22\x20\x2C\x29\x67\x60\x0C\x24\x21\x23\x34\x6E\x22\x25\x22\x3B\x30\x74\x22\x3E\x3E\x34\x3C\x7A\x39\x29\x34\x32\x3B\x09\x0F\x05\x43\x1D\x0A\x13\x15\x48\x01\x0B\x08\x07\x44" + 0x0954A532).s, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		const char* listbox_radio[] = {
@@ -196,6 +197,7 @@ void CSHackCreator::Interface::Settings()
 
 		ImGui::NewLine();
 	}
+	#endif//CSHACKCREATOR_V2_ENABLE_RADIO
 	if (ImGui::CollapsingHeader(/*Files*/XorStr<0x77, 6, 0x8BFBC525>("\x31\x11\x15\x1F\x08" + 0x8BFBC525).s, ImGuiTreeNodeFlags_DefaultOpen))
 	{
 		ImGui::PushItemWidth(200);

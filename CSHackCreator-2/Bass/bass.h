@@ -1,3 +1,7 @@
+#include "../../COMPILE_FLAGS.h"
+
+#ifdef CSHACKCREATOR_V2_ENABLE_RADIO
+
 /*
 	BASS 2.4 C/C++ header file
 	Copyright (c) 1999-2016 Un4seen Developments Ltd.
@@ -1117,3 +1121,5 @@ static inline BOOL BASS_SetConfigPtr(DWORD option, const WCHAR *value)
 #endif
 
 #endif
+
+#endif//CSHACKCREATOR_V2_ENABLE_RADIO

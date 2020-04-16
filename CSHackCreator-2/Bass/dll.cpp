@@ -1,5 +1,9 @@
 //#define _CRT_SECURE_NO_WARNINGS
 
+#include "../../COMPILE_FLAGS.h"
+
+#ifdef CSHACKCREATOR_V2_ENABLE_RADIO
+
 #include <windows.h>
 #include <winnt.h>
 #include <stddef.h>
@@ -743,3 +747,5 @@ namespace BASS
 	char bass_metadata[MAX_PATH];
 	char bass_channelinfo[MAX_PATH];
 }
+
+#endif//CSHACKCREATOR_V2_ENABLE_RADIO

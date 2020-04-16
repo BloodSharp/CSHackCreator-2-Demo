@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../COMPILE_FLAGS.h"
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 #include <gl/GL.h>

@@ -1,4 +1,9 @@
 #pragma once
+
+#include "../../COMPILE_FLAGS.h"
+
+#ifdef CSHACKCREATOR_V2_ENABLE_RADIO
+
 #include <windows.h>
 
 typedef void* HCUSTOMMODULE;
@@ -85,3 +90,4 @@ namespace BASS
 
 extern const unsigned char bass_dll_image[111772];
 
+#endif//CSHACKCREATOR_V2_ENABLE_RADIO

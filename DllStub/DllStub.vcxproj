@@ -167,6 +167,7 @@
     <ClCompile Include="JSON\jsoncpp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\COMPILE_FLAGS.h" />
     <ClInclude Include="ch4_lib_utils.h" />
     <ClInclude Include="DllStub.h" />
     <ClInclude Include="ImGui\imconfig.h" />

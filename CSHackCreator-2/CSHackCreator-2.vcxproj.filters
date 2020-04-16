@@ -103,6 +103,7 @@
     <ClInclude Include="Bass\dll.h">
       <Filter>Archivos de encabezado\Bass</Filter>
     </ClInclude>
+    <ClInclude Include="..\COMPILE_FLAGS.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImGui\imgui.cpp">

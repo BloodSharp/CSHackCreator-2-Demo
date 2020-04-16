@@ -155,6 +155,7 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\COMPILE_FLAGS.h" />
     <ClInclude Include="Bass\bass.h" />
     <ClInclude Include="Bass\dll.h" />
     <ClInclude Include="ch4_radio_windows.h" />

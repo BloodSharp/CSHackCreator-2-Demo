@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../COMPILE_FLAGS.h"
+
 #define _CRT_SECURE_NO_WARNINGS
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #   define IMGUI_DEFINE_MATH_OPERATORS
@@ -27,7 +29,9 @@
 #include "Serialization.h"
 #include "Settings.h"
 
+#ifdef CSHACKCREATOR_V2_ENABLE_RADIO
 #include "ch4_radio_windows.h"
+#endif//CSHACKCREATOR_V2_ENABLE_RADIO
 
 #include "xorstr.h"
 
