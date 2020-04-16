@@ -727,6 +727,10 @@ void WINAPI GenericSwapBuffers(HDC hDC)
         {
             pHLWndProc = (WNDPROC)SetWindowLong(hdHalfLife, GWL_WNDPROC, (LONG)HOOK_WndProc);
             ImGui::CreateContext();
+            // Setup Dear ImGui style
+            //ImGui::StyleColorsDark();
+            ImGui::StyleColorsClassic();
+            //ImGui::StyleColorsLight();
             DllStub::Interface::Initialize();
             ImGui_ImplWin32_Init(hdHalfLife);
             ImGui_ImplOpenGL2_Init();

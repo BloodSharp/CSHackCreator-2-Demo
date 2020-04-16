@@ -238,6 +238,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Setup Dear ImGui style
     //ImGui::StyleColorsDark();
     ImGui::StyleColorsClassic();
+    //ImGui::StyleColorsLight();
     InitializeLoader();
     // Setup Platform/Renderer bindings
     ImGui_ImplWin32_Init(hwnd);
