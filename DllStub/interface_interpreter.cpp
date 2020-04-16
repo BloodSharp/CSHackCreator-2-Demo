@@ -243,7 +243,10 @@ void Children(Node* masterNode)
 						Children(Nodes[masterNode->connections[i].uiTargetNode]);
 					}
 				}
-				else if (masterNode->connections[i].uiSourceSlot == 1)
+			}
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 1)
 				{
 					ImGui::SameLine();
 					Children(Nodes[masterNode->connections[i].uiTargetNode]);
@@ -261,7 +264,10 @@ void Children(Node* masterNode)
 						Children(Nodes[masterNode->connections[i].uiTargetNode]);
 					}
 				}
-				else if (masterNode->connections[i].uiSourceSlot == 0)
+			}
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 0)
 				{
 					ImGui::SameLine();
 					Children(Nodes[masterNode->connections[i].uiTargetNode]);
@@ -282,7 +288,10 @@ void Children(Node* masterNode)
 						Children(Nodes[masterNode->connections[i].uiTargetNode]);
 					}
 				}
-				else if (masterNode->connections[i].uiSourceSlot == 0)
+			}
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 0)
 				{
 					ImGui::SameLine();
 					Children(Nodes[masterNode->connections[i].uiTargetNode]);
@@ -300,7 +309,10 @@ void Children(Node* masterNode)
 						Children(Nodes[masterNode->connections[i].uiTargetNode]);
 					}
 				}
-				else if (masterNode->connections[i].uiSourceSlot == 0)
+			}
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 0)
 				{
 					ImGui::SameLine();
 					Children(Nodes[masterNode->connections[i].uiTargetNode]);
@@ -326,7 +338,10 @@ void Children(Node* masterNode)
 						Children(Nodes[masterNode->connections[i].uiTargetNode]);
 					}
 				}
-				else if (masterNode->connections[i].uiSourceSlot == 0)
+			}
+			for (unsigned int i = 0; i < masterNode->connections.size(); i++)
+			{
+				if (masterNode->connections[i].uiSourceSlot == 0)
 				{
 					ImGui::SameLine();
 					Children(Nodes[masterNode->connections[i].uiTargetNode]);
