@@ -57,7 +57,7 @@ bool WINAPI InyectarDLL()
         AdjustTokenPrivileges(hToken, 0, &tkp, sizeof(tkp), NULL, NULL);
     }
 
-    while ((VentanaHL = FindWindowA(/*Valve001*/XorStr<0x06, 9, 0x105F9F6A>("\x50\x66\x64\x7F\x6F\x3B\x3C\x3C" + 0x105F9F6A).s, 0)) == NULL && (VentanaHL = FindWindowA(0,/*Half-Life*/XorStr<0x19, 10, 0x6B9F95B8>("\x51\x7B\x77\x7A\x30\x52\x76\x46\x44" + 0x6B9F95B8).s)) == NULL)
+    while ((VentanaHL = FindWindowA(/*Valve001*/XorStr<0x06, 9, 0x105F9F6A>("\x50\x66\x64\x7F\x6F\x3B\x3C\x3C" + 0x105F9F6A).s, 0)) == NULL && (VentanaHL = FindWindowA(/*SDL_app*/XorStr<0xDB, 8, 0xC9CEFF72>("\x88\x98\x91\x81\xBE\x90\x91" + 0xC9CEFF72).s, 0)) == NULL)
         Sleep(100);
 
     GetWindowThreadProcessId(VentanaHL, &pid);
