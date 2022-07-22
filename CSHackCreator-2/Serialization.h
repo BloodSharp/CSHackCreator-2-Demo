@@ -5,9 +5,9 @@ namespace CSHackCreator
 	namespace Project
 	{
 		void New();
-		void Open(HWND hwnd);
-		void Save(HWND hwnd);
-		void Build(HWND hwnd);
-		void Decompile(HWND hwnd);
+		void Open(void* hwnd);
+		void Save(void* hwnd);
+		void Build(void* hwnd);
+		void Decompile(void* hwnd);
 	}
 }

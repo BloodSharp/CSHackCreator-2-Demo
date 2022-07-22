@@ -46,30 +46,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ImGui\imconfig.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_dx9.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_impl_win32.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imgui_internal.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_rectpack.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_textedit.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="ImGui\imstb_truetype.h">
-      <Filter>Archivos de encabezado\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="ImGui\ImNodes.h">
       <Filter>Archivos de encabezado\ImGui</Filter>
     </ClInclude>
@@ -104,26 +80,35 @@
       <Filter>Archivos de encabezado\Bass</Filter>
     </ClInclude>
     <ClInclude Include="..\COMPILE_FLAGS.h" />
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_opengl3.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_opengl3_loader.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_sdl.h">
+      <Filter>Archivos de encabezado\ImGui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_dx9.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\ImNodes.cpp">
       <Filter>Archivos de origen\ImGui</Filter>
     </ClCompile>
@@ -142,9 +127,6 @@
     <ClCompile Include="Settings.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="ch4_radio_windows.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
@@ -153,6 +135,30 @@
     </ClCompile>
     <ClCompile Include="Bass\dll_image.cpp">
       <Filter>Archivos de origen\Bass</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_opengl3.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_sdl.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Archivos de origen\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

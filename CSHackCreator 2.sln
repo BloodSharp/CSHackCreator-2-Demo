@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CSHackCreator-2", "CSHackCreator-2\CSHackCreator-2.vcxproj", "{453ED442-A95F-4172-A2C5-8714585D85C8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4A4E5C52-E137-4F9B-97E4-B6D53EF6645B} = {4A4E5C52-E137-4F9B-97E4-B6D53EF6645B}
+		{698E8C51-990F-4BDA-B024-13361D667A44} = {698E8C51-990F-4BDA-B024-13361D667A44}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllStub", "DllStub\DllStub.vcxproj", "{698E8C51-990F-4BDA-B024-13361D667A44}"
 EndProject

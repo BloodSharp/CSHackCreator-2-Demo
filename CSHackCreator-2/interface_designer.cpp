@@ -375,9 +375,11 @@ void ProcessSliderContent(MyNode* node, float zoom)
 
 void CSHackCreator::Interface::Designer()
 {
-    static ImNodes::CanvasState canvas{};
+    // Canvas must be created after ImGui initializes, because constructor accesses ImGui style to configure default colors.
+    static ImNodes::Ez::Context* canvas = ImNodes::Ez::CreateContext();
+    //IM_UNUSED(canvas);
 
-    ImNodes::BeginCanvas(&canvas);
+    ImNodes::Ez::BeginCanvas();
     for (auto it = CSHackCreator::Settings::Nodes.begin(); it != CSHackCreator::Settings::Nodes.end();)
     {
         MyNode* node = *it;
@@ -387,19 +389,19 @@ void CSHackCreator::Interface::Designer()
             ImNodes::Ez::InputSlots(node->input_slots.data(), node->input_slots.size());
 
             // Custom node content may go here
-            ProcessWindowContent(node, canvas.zoom);
-            ProcessTabBarContent(node, canvas.zoom);
-            ProcessTabBarItemContent(node, canvas.zoom);
-            //ProcessVariableEqualsContent(node, canvas.zoom);
-            //ProcessVariableSetValueContent(node, canvas.zoom);
+            ProcessWindowContent(node, canvas->State.Zoom);
+            ProcessTabBarContent(node, canvas->State.Zoom);
+            ProcessTabBarItemContent(node, canvas->State.Zoom);
+            //ProcessVariableEqualsContent(node, canvas->State.Zoom);
+            //ProcessVariableSetValueContent(node, canvas->State.Zoom);
             ProcessGroupContent(node);
-            ProcessTextContent(node, canvas.zoom);
-            //ProcessButtonContent(node, canvas.zoom);
-            ProcessComboBoxContent(node, canvas.zoom);
-            ProcessCheckBoxContent(node, canvas.zoom);
-            ProcessToolTipContent(node, canvas.zoom);
+            ProcessTextContent(node, canvas->State.Zoom);
+            //ProcessButtonContent(node, canvas->State.Zoom);
+            ProcessComboBoxContent(node, canvas->State.Zoom);
+            ProcessCheckBoxContent(node, canvas->State.Zoom);
+            ProcessToolTipContent(node, canvas->State.Zoom);
             ProcessNewLineContent(node);
-            ProcessSliderContent(node, canvas.zoom);
+            ProcessSliderContent(node, canvas->State.Zoom);
 
             ImNodes::Ez::OutputSlots(node->output_slots.data(), node->output_slots.size());
 
@@ -432,7 +434,7 @@ void CSHackCreator::Interface::Designer()
         }
         ImNodes::Ez::EndNode();
 
-        if (node->selected && ImGui::IsKeyPressedMap(ImGuiKey_Delete))
+        if (node->selected && ImGui::IsKeyDown(ImGuiKey_Delete))
         {
             // Deletion order is critical: first we delete connections to us
             for (auto& connection : node->connections)
@@ -459,7 +461,7 @@ void CSHackCreator::Interface::Designer()
     const ImGuiIO& io = ImGui::GetIO();
     if (ImGui::IsMouseReleased(1) && ImGui::IsWindowHovered() && !ImGui::IsMouseDragging(1))
     {
-        ImGui::FocusWindow(ImGui::GetCurrentWindow());
+        //ImGui::FocusWindow(ImGui::GetCurrentWindow());
         ImGui::OpenPopup(/*NodesContextMenu*/XorStr<0x4E, 17, 0xF341A15F>("\x00\x20\x34\x34\x21\x10\x3B\x3B\x22\x32\x20\x2D\x17\x3E\x32\x28" + 0xF341A15F).s);
     }
 
@@ -475,16 +477,16 @@ void CSHackCreator::Interface::Designer()
         }
         ImGui::Separator();
         if (ImGui::MenuItem(/*Reset Zoom*/XorStr<0xBC, 11, 0x474CB760>("\xEE\xD8\xCD\xDA\xB4\xE1\x98\xAC\xAB\xA8" + 0x474CB760).s))
-            canvas.zoom = 1;
+            canvas->State.Zoom = 1;
         if (ImGui::MenuItem(/*Reset Position*/XorStr<0xEB, 15, 0x1FCCD759>("\xB9\x89\x9E\x8B\x9B\xD0\xA1\x9D\x80\x9D\x81\x9F\x98\x96" + 0x1FCCD759).s))
-            canvas.offset = ImVec2(0.0f, 0.0f);
+            canvas->State.Offset = ImVec2(0.0f, 0.0f);
 
         if (ImGui::IsAnyMouseDown() && !ImGui::IsWindowHovered())
             ImGui::CloseCurrentPopup();
         ImGui::EndPopup();
     }
 
-    ImNodes::EndCanvas();
+    ImNodes::Ez::EndCanvas();
 }
 
 const char* GetNodeTitle(int iNodeType)
