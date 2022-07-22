@@ -4,12 +4,12 @@
 // Having a single function that acts as a loop prevents us to store state in the stack of said function. So we need some location for this.
 SDL_Window* g_Window = NULL;
 SDL_GLContext   g_GLContext = NULL;
-#if not defined(__EMSCRIPTEN__)
-HWND g_Hwnd = 0;
-bool g_bDone = false;
-#elif defined(_WIN32)
+#if defined(__EMSCRIPTEN__)
 void* g_Hwnd = 0;
+#elif defined(_WIN32)
+HWND g_Hwnd = 0;
 #endif
+bool g_bDone = false;
 
 void main_loop(void* arg)
 {
@@ -46,7 +46,7 @@ void main_loop(void* arg)
     ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize, ImGuiCond_Always);
     //const ImGuiStyle& style = ImGui::GetStyle();
-    if (ImGui::Begin(/*CSHackCreator*/XorStr<0xF9, 14, 0x32B4D256>("\xBA\xA9\xB3\x9D\x9E\x95\xBC\x72\x64\x63\x77\x6B\x77" + 0x32B4D256).s, nullptr,
+    if (ImGui::Begin("CSHackCreator", nullptr,
         /*ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse |*/ ImGuiWindowFlags_MenuBar |
         ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse |
         ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize
@@ -247,12 +247,8 @@ int main(int, char**)
     //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     //IM_ASSERT(font != NULL);
 
-    // Our state
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
     // Main loop
+#if not defined(__EMSCRIPTEN__)
     g_bDone = false;
     while (!g_bDone)
     {
@@ -267,6 +263,10 @@ int main(int, char**)
     SDL_GL_DeleteContext(g_GLContext);
     SDL_DestroyWindow(g_Window);
     SDL_Quit();
+#else
+    // This function call won't return, and will engage in an infinite loop, processing events from the browser, and dispatching them.
+    emscripten_set_main_loop_arg(main_loop, NULL, 0, true);
+#endif
 
     return 0;
 }

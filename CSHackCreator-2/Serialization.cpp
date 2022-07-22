@@ -153,9 +153,9 @@ void CSHackCreator::Project::Build(void* hwnd)
 #endif
 }
 
-bool IsThisAddressContainString(PBYTE dwAddress, PBYTE string)
+bool IsThisAddressContainString(unsigned char* dwAddress, unsigned char* string)
 {
-    for (UINT i = 0; i < strlen((char*)string) + 1; i++)
+    for (unsigned int i = 0; i < strlen((char*)string) + 1; i++)
         if (string[i] != dwAddress[i])
             return false;
     return true;

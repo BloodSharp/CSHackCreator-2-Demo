@@ -29,6 +29,15 @@
 #include <dinput.h>
 #include <tchar.h>
 */
+
+#ifndef MAX_PATH
+#define MAX_PATH 260
+#endif
+
+#if defined(__EMSCRIPTEN__)
+#include <emscripten.h>
+#endif
+
 #include <iostream>
 #include <fstream>
 #include <vector>
