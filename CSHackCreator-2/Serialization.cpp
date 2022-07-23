@@ -347,5 +347,8 @@ void CSHackCreator::Project::Decompile(void* hwnd)
         }
     }
 #elif defined(__EMSCRIPTEN__)
+    EM_ASM({
+        alert('CSHackCreator v2 - BloodSharp\n\nCurrently implemented on Windows version! Sorry...');
+    });
 #endif
 }
