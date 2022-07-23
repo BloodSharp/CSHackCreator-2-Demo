@@ -6,6 +6,8 @@ SDL_Window* g_Window = NULL;
 SDL_GLContext   g_GLContext = NULL;
 #if defined(__EMSCRIPTEN__)
 void* g_Hwnd = 0;
+extern bool g_bShouldReadProjectFile;
+void CleanAllNodesAndConnections();
 #elif defined(_WIN32)
 HWND g_Hwnd = 0;
 #endif
@@ -13,6 +15,24 @@ bool g_bDone = false;
 
 void main_loop(void* arg)
 {
+#if defined(__EMSCRIPTEN__)
+    if (g_bShouldReadProjectFile)
+    {
+        Json::Value settings;
+        std::ifstream configDoc("./Project.txt", std::ifstream::binary);
+        if (configDoc.is_open())
+        {
+            g_bShouldReadProjectFile = false;
+            remove("./Project.txt");
+            configDoc >> settings;
+            configDoc.close();
+
+            CleanAllNodesAndConnections();
+            CSHackCreator::Settings::Open(settings);
+            CSHackCreator::Settings::OpenNodes(settings);
+        }
+    }
+#endif
     ImGuiIO& io = ImGui::GetIO();
     IM_UNUSED(arg);
 
@@ -89,6 +109,10 @@ void main_loop(void* arg)
                     MessageBox(g_Hwnd,
                         "Usage:\n\nRight mouse button : Display nodes popup menu.\nMiddle mouse button : Move around the canvas.\nDouble left mouse click : Delete connections.\nDelete key : Delete all selected nodes.",
                         "CSHackCreator v2 - BloodSharp", MB_ICONINFORMATION);
+#elif defined(__EMSCRIPTEN__)
+                    EM_ASM({
+                        alert('CSHackCreator v2 - BloodSharp\n\nUsage:\n\nRight mouse button : Display nodes popup menu.\nMiddle mouse button : Move around the canvas.\nDouble left mouse click : Delete connections.\nDelete key : Delete all selected nodes.');
+                    });
 #endif
                 }
                 ImGui::Separator();
@@ -98,6 +122,12 @@ void main_loop(void* arg)
                     MessageBox(g_Hwnd,
                         "Coded by Agustin Alejandro dos Santos in Argentina\n\nCredits:\nOmar Cornut from Dear ImGui library.\nBaptiste Lepilleur from JSONCPP library.\nAnd many people from Gamedeception.net community...",
                         "CSHackCreator v2 - BloodSharp", MB_ICONINFORMATION);
+#elif defined(__EMSCRIPTEN__)
+                    EM_ASM({
+                        alert(
+                            "CSHackCreator v2 - BloodSharp\n\nCoded by Agustin Alejandro dos Santos in Argentina\n\nCredits:\nOmar Cornut from Dear ImGui library.\nBaptiste Lepilleur from JSONCPP library.\nAnd many people from Gamedeception.net community..."
+                        );
+                    });
 #endif
                 }
                 ImGui::EndMenu();

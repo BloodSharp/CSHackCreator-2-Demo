@@ -3,6 +3,8 @@
 #if defined(_WIN32)
     #include <Windows.h>
     #include <commdlg.h>
+#elif defined(__EMSCRIPTEN__)
+bool g_bShouldReadProjectFile = false;
 #endif
 
 void CleanAllNodesAndConnections()
@@ -64,6 +66,26 @@ void CSHackCreator::Project::Open(void* hwnd)
         CSHackCreator::Settings::OpenNodes(settings);
     }
 #elif defined(__EMSCRIPTEN__)
+    EM_ASM({
+        function cshcv2onLoadContent(event) {
+            FS.writeFile("/Project.txt", event.target.result);
+        }
+
+        function cshcv2onReadFiles(event) {
+            const file = event.target.files[0];
+            cshcv2reader = new FileReader();
+            cshcv2reader.addEventListener('load', cshcv2onLoadContent);
+            cshcv2reader.readAsText(file, 'UTF-8');
+        }
+
+        var cshcv2inputObject = document.createElement('input');
+        cshcv2inputObject.type = 'file';
+        cshcv2inputObject.accept = '*.json';
+        cshcv2inputObject.addEventListener('change', cshcv2onReadFiles);
+        cshcv2inputObject.click();
+    });
+
+    g_bShouldReadProjectFile = true;
 #endif
 }
 
@@ -100,10 +122,22 @@ void CSHackCreator::Project::Save(void* hwnd)
         configDoc.close();
     }
 #elif defined(__EMSCRIPTEN__)
+    Json::Value settings;
+    Json::StyledWriter styledWriter;
+
+    CSHackCreator::Settings::Save(settings);
+    CSHackCreator::Settings::SaveNodes(settings);
+    EM_ASM({
+        var blob = new Blob([UTF8ToString($0,$1)], {type: 'application/json'});// change resultByte to bytes
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'CSHackCreatorProject.json';
+        link.click();
+    }, styledWriter.write(settings).c_str(), strlen(styledWriter.write(settings).c_str()));
 #endif
 }
 
-#define CSHACKCREATOR_V2_SIGNATURE /*<(BLOODSHARP_CSHACKCREATOR_V2)>*/XorStr<0xD2,32,0xCB7E3612>("\xEE\xFB\x96\x99\x99\x98\x9C\x8A\x92\x9A\x8E\x8D\x81\x9C\xB3\xA9\xA3\xA0\xAF\xA6\xB4\xA2\xA9\xBD\xA5\xB9\xB3\xBB\xDC\xC6\xCE"+0xCB7E3612).s
+#define CSHACKCREATOR_V2_SIGNATURE "<(BLOODSHARP_CSHACKCREATOR_V2)>"
 
 void CSHackCreator::Project::Build(void* hwnd)
 {
@@ -111,8 +145,8 @@ void CSHackCreator::Project::Build(void* hwnd)
     HRSRC hResource;
     DWORD dwResourceSize;
     HGLOBAL hGlob;
-    LPSTR lpBuffer;
-
+#endif
+    char* lpBuffer = 0;
     Json::Value settings;
     Json::FastWriter fastWriter;
 
@@ -124,12 +158,47 @@ void CSHackCreator::Project::Build(void* hwnd)
 
     if (fsExecutable.is_open())
     {
+#if defined(_WIN32)
         hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_EXE_STUB), /*EXE_STUB*/XorStr<0xA9, 9, 0x4799BEAD>("\xEC\xF2\xEE\xF3\xFE\xFA\xFA\xF2" + 0x4799BEAD).s);
         dwResourceSize = SizeofResource(NULL, hResource);
         hGlob = LoadResource(NULL, hResource);
         lpBuffer = (LPSTR)LockResource(hGlob);
 
         fsExecutable.write(lpBuffer, dwResourceSize);
+#elif defined(__EMSCRIPTEN__)
+        std::fstream fsExeStub("./ExeStub.exe", std::fstream::in | std::fstream::binary);
+        if (fsExeStub.is_open())
+        {
+            fsExeStub.seekg(0, fsExeStub.end);
+            int iFileSize = fsExeStub.tellg();
+            if (iFileSize > 0)
+            {
+                fsExeStub.seekg(0, fsExeStub.beg);
+                lpBuffer = new char[iFileSize];
+                if (lpBuffer)
+                {
+                    fsExecutable.write(lpBuffer, iFileSize);
+                    fsExeStub.close();
+                    delete[]lpBuffer;
+                }
+                else
+                {
+                    fsExecutable.close();
+                    fsDll.close();
+                    fsExeStub.close();
+                    return;
+                }
+            }
+            else
+            {
+                fsExecutable.close();
+                fsDll.close();
+                fsExeStub.close();
+                return;
+            }
+        }
+#endif
+
         fsExecutable.write(CSHACKCREATOR_V2_SIGNATURE, strlen(CSHACKCREATOR_V2_SIGNATURE) + 1);
         fsExecutable << fastWriter.write(settings);
         fsExecutable.close();
@@ -137,20 +206,72 @@ void CSHackCreator::Project::Build(void* hwnd)
 
     if(fsDll.is_open())
     {
+#if defined(_WIN32)
         hResource = FindResource(NULL, MAKEINTRESOURCE(IDR_DLL_STUB), /*DLL_STUB*/XorStr<0x39, 9, 0xDBF4E089>("\x7D\x76\x77\x63\x6E\x6A\x6A\x02" + 0xDBF4E089).s);
         dwResourceSize = SizeofResource(NULL, hResource);
         hGlob = LoadResource(NULL, hResource);
         lpBuffer = (LPSTR)LockResource(hGlob);
-
         fsDll.write(lpBuffer, dwResourceSize);
+#elif defined(__EMSCRIPTEN__)
+        std::fstream fsDllStub("./DllStub.dll", std::fstream::in | std::fstream::binary);
+        if (fsDllStub.is_open())
+        {
+            fsDllStub.seekg(0, fsDllStub.end);
+            int iFileSize = fsDllStub.tellg();
+            if (iFileSize > 0)
+            {
+                fsDllStub.seekg(0, fsDllStub.beg);
+                lpBuffer = new char[iFileSize];
+                if (lpBuffer)
+                {
+                    fsDll.write(lpBuffer, iFileSize);
+                    fsDllStub.close();
+                    delete[]lpBuffer;
+                }
+                else
+                {
+                    fsExecutable.close();
+                    fsDll.close();
+                    fsDllStub.close();
+                    return;
+                }
+            }
+            else
+            {
+                fsExecutable.close();
+                fsDll.close();
+                fsDllStub.close();
+                return;
+            }
+        }
+#endif
         fsDll.write(CSHACKCREATOR_V2_SIGNATURE, strlen(CSHACKCREATOR_V2_SIGNATURE) + 1);
         fsDll << fastWriter.write(settings);
         fsDll.close();
     }
-
+#if defined(_WIN32)
     MessageBox((HWND)hwnd, /*Done enjoy your new hack!*/XorStr<0x1A, 26, 0x5670094F>("\x5E\x74\x72\x78\x3E\x7A\x4E\x4B\x4D\x5A\x04\x5C\x49\x52\x5A\x09\x44\x4E\x5B\x0D\x46\x4E\x53\x5A\x13" + 0x5670094F).s, /*CSHackCreator v2 - BloodSharp*/XorStr<0xCB, 30, 0x38F92DF7>("\x88\x9F\x85\xAF\xAC\xBB\x92\xA0\xB6\xB5\xA1\xB9\xA5\xF8\xAF\xE8\xFB\xF1\xFD\x9C\xB3\x8F\x8E\x86\xB0\x8C\x84\x94\x97" + 0x38F92DF7).s, MB_ICONINFORMATION);
 #elif defined(__EMSCRIPTEN__)
+    SDL_Delay(1000);
+    EM_ASM({
+        var blob=new Blob([FS.readFile('/'+UTF8ToString($0,$1))], {type: 'application/exe'});// change resultByte to bytes
+        var link=document.createElement('a');
+        link.href=window.URL.createObjectURL(blob);
+        link.download=UTF8ToString($0,$1);
+        link.click();
+    }
+    , CSHackCreator::Settings::szExeFile, strlen(CSHackCreator::Settings::szExeFile));
+
+    EM_ASM({
+        var blob=new Blob([FS.readFile('/'+UTF8ToString($0,$1))], {type: 'application/dll'});// change resultByte to bytes
+        var link=document.createElement('a');
+        link.href=window.URL.createObjectURL(blob);
+        link.download=UTF8ToString($0,$1);
+        link.click();
+    }
+    , CSHackCreator::Settings::szDllFile, CSHackCreator::Settings::szDllFile);
 #endif
+
 }
 
 bool IsThisAddressContainString(unsigned char* dwAddress, unsigned char* string)
