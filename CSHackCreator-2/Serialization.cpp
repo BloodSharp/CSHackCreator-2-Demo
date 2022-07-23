@@ -177,6 +177,7 @@ void CSHackCreator::Project::Build(void* hwnd)
                 lpBuffer = new char[iFileSize];
                 if (lpBuffer)
                 {
+                    fsExeStub.read(lpBuffer, iFileSize);
                     fsExecutable.write(lpBuffer, iFileSize);
                     fsExeStub.close();
                     delete[]lpBuffer;
@@ -224,6 +225,7 @@ void CSHackCreator::Project::Build(void* hwnd)
                 lpBuffer = new char[iFileSize];
                 if (lpBuffer)
                 {
+                    fsDllStub.read(lpBuffer, iFileSize);
                     fsDll.write(lpBuffer, iFileSize);
                     fsDllStub.close();
                     delete[]lpBuffer;
