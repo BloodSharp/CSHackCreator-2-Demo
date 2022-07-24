@@ -20,7 +20,9 @@
 // THE SOFTWARE.
 //
 
-#pragma warning(disable: 4703)
+#if defined(_WIN32)
+    #pragma warning(disable: 4703)
+#endif
 
 #ifndef IMGUI_DEFINE_MATH_OPERATORS
 #   define IMGUI_DEFINE_MATH_OPERATORS
