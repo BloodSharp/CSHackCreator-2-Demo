@@ -14,5 +14,8 @@ A tool which generates custom cheats based on user input, for the old Counter-St
 ## Online version
 An online version can be found at [https://bloodsharp.github.io/CSHackCreator2/](https://bloodsharp.github.io/CSHackCreator2/) compiled with emscripten (WebAssembly)
 
+## License
+Released under [MIT License](LICENSE)
+
 
 B#
