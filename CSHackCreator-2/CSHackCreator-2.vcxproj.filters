@@ -139,9 +139,6 @@
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>Archivos de origen\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>Archivos de origen\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="ImGui\imgui_draw.cpp">
       <Filter>Archivos de origen\ImGui</Filter>
     </ClCompile>
